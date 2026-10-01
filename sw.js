@@ -1,6 +1,6 @@
 // Guarda la app para que abra al instante y sin conexión (los datos se piden siempre al servidor).
-const CACHE = 'mis-finanzas-v1';
-const ARCHIVOS = ['./', './index.html', './manifest.webmanifest', './icon-180.png', './icon-192.png', './icon-512.png'];
+const CACHE = 'mis-finanzas-v2';
+const ARCHIVOS = ['./', './index.html', './icon-180.png', './icon-192.png', './icon-512.png'];
 
 self.addEventListener('install', e => {
   e.waitUntil(caches.open(CACHE).then(c => c.addAll(ARCHIVOS)).then(() => self.skipWaiting()));

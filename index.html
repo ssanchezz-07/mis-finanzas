@@ -8,7 +8,6 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Mis Finanzas">
 <meta name="theme-color" content="#16212A">
-<link rel="manifest" href="manifest.webmanifest">
 <link rel="apple-touch-icon" href="icon-180.png">
 <link rel="icon" href="icon-192.png">
 <title>Mis Finanzas</title>
@@ -176,7 +175,15 @@ input:focus{outline:2px solid var(--accent);border-color:var(--accent)}
   }
 
   // ---------- arranque y acceso
-  function leerCodigo(){ const h=location.hash.replace('#','').trim(); if(/^[0-9a-f]{32,64}$/.test(h)){ ls.set('mf_codigo',h); return h; } return ls.get('mf_codigo'); }
+  // el código viaja en el enlace del QR; se copia también a ?c= porque la app de la pantalla de inicio
+  // se abre con la dirección guardada y no comparte memoria con Safari
+  const valido=c=>/^[0-9a-f]{32,64}$/.test(c||'');
+  function extraer(txt){ const m=String(txt||'').match(/[0-9a-f]{40}/); return m?m[0]:null; }
+  function leerCodigo(){
+    const q=new URLSearchParams(location.search).get('c'), h=location.hash.replace('#','').trim();
+    const c=valido(h)?h:valido(q)?q:ls.get('mf_codigo');
+    if(valido(c)){ ls.set('mf_codigo',c); if(q!==c||h!==c) history.replaceState(null,'',location.pathname+'?c='+c+'#'+c); return c; }
+    return null; }
   async function arrancar(){
     codigo=leerCodigo();
     if(!codigo){ pantallaSinCodigo(); return; }
@@ -197,7 +204,11 @@ input:focus{outline:2px solid var(--accent);border-color:var(--accent)}
   }
   function pantallaSinCodigo(){
     app.innerHTML=`<div class="acceso"><img class="logo" src="icon-192.png" alt=""><h1>Mis Finanzas</h1>
-      <p class="muted">Para conectar este móvil, abre en el programa de tu ordenador la sección <b>Tu móvil</b> y escanea el código QR con la cámara del iPhone.</p></div>`;
+      <p class="muted">Para conectar este móvil, abre en el programa de tu ordenador la sección <b>Tu móvil</b> y escanea el código QR con la cámara del iPhone.</p>
+      <p class="muted small">¿Ya lo escaneaste y has abierto la app desde la pantalla de inicio? Pega aquí el enlace del QR (en el programa: «Copiar enlace»):</p>
+      <form id="f-enl" style="display:grid;gap:10px"><input id="enl" placeholder="https://…/#…" autocomplete="off" autocapitalize="off"><button class="btn" type="submit">Conectar</button></form></div>`;
+    $('#f-enl').onsubmit=e=>{ e.preventDefault(); const c=extraer($('#enl').value); if(!c){ $('#enl').value=''; $('#enl').placeholder='Ese enlace no es válido'; return; }
+      location.replace(location.pathname+'?c='+c+'#'+c); };
   }
   function pantallaAcceso(error){
     app.innerHTML=`<form class="acceso" id="f-acc"><img class="logo" src="icon-192.png" alt=""><h1>Mis Finanzas</h1>
