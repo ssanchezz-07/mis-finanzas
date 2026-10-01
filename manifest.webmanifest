@@ -1,0 +1,16 @@
+{
+  "name": "Mis Finanzas",
+  "short_name": "Mis Finanzas",
+  "description": "Tu patrimonio, gastos, cartera y objetivos, sincronizados con el programa de tu ordenador.",
+  "lang": "es",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#EEF2EF",
+  "theme_color": "#16212A",
+  "icons": [
+    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
