@@ -120,6 +120,7 @@ input{font:inherit;font-size:16px;color:var(--ink);background:var(--surface);bor
 input:focus{outline:2px solid var(--accent);border-color:var(--accent)}
 .btn{all:unset;cursor:pointer;text-align:center;background:var(--accent);color:var(--accent-ink);font-weight:600;padding:13px 16px;border-radius:12px}
 .btn.sec{background:var(--soft);color:var(--ink)}
+.btn:disabled{opacity:.6}
 .err{color:var(--bad);font-size:13.5px}
 /* acciones desde el móvil */
 .sec-top{display:flex;justify-content:space-between;align-items:center;gap:10px}
@@ -133,6 +134,13 @@ input:focus{outline:2px solid var(--accent);border-color:var(--accent)}
 .rapidas{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .rapidas button{all:unset;cursor:pointer;background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:12px 14px;display:grid;gap:2px;font-weight:600;font-size:14.5px}
 .rapidas button span{font-weight:400;font-size:12.5px;color:var(--muted)}
+.rapidas button.ancha{grid-column:1/-1;grid-template-columns:auto 1fr;align-items:center;gap:12px;background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.rapidas button.ancha b{display:grid;gap:2px;font-weight:600}
+.rapidas button.ancha b span{color:var(--accent-ink);opacity:.8}
+.rapidas .ico{display:grid;place-items:center;width:38px;height:38px;border-radius:12px;background:rgba(255,255,255,.16);color:var(--accent-ink)}
+.rapidas .ico svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+input[type=file]{padding:10px;font-size:14px}
+.hoja .nota{font-size:13px;color:var(--muted);margin:0}
 .espera{background:var(--warn-soft);color:var(--ink);border-radius:16px;padding:12px 14px;display:grid;gap:6px;font-size:13.5px;margin-top:6px}
 .espera b{color:var(--warn)}
 .pill.esp{background:var(--warn-soft);color:var(--warn)}
@@ -452,7 +460,8 @@ select{font:inherit;font-size:16px;color:var(--ink);background:var(--surface);bo
       ${avisos?`<section><h2>Avisos</h2><div class="card">${avisos}</div></section>`:''}`;
   }
   function vRapidas(){
-    return `<section><div class="rapidas"><button data-acc="gasto">Gasto en efectivo<span>Apúntalo al momento</span></button>
+    return `<section><div class="rapidas"><button data-acc="importar" class="ancha"><span class="ico"><svg viewBox="0 0 24 24"><path d="M12 4v11m0 0l-4-4m4 4l4-4"/><path d="M5 19h14"/></svg></span><b>Importar extracto<span>CSV o Excel de tu banco o bróker</span></b></button>
+      <button data-acc="gasto">Gasto en efectivo<span>Apúntalo al momento</span></button>
       <button data-acc="saldo">Anotar un saldo<span>Trust Wallet, bancos…</span></button></div></section>`;
   }
   function vCartera(){
@@ -531,13 +540,14 @@ select{font:inherit;font-size:16px;color:var(--ink);background:var(--surface);bo
     for(const p of pend.filter(p=>!p.enviado)){
       try{ const r=await fetch(SERVIDOR+'/rest/v1/rpc/enviar_cambio',{method:'POST',headers:{'apikey':PUBLICA,'Content-Type':'application/json'},
           body:JSON.stringify({p_id:codigo,p_datos:await cifrar(clave,p.datos)})});
-        if(!r.ok) throw new Error('HTTP '+r.status); p.enviado=true; guardarPend(); }
+        if(!r.ok) throw new Error(r.status===400?'grande':'HTTP '+r.status);
+        p.enviado=true; if(p.datos.archivos) p.datos.archivos=p.datos.archivos.map(a=>({nombre:a.nombre})); guardarPend(); }
       catch(e){ break; } }
   }
   function revisarAplicados(){
     const ap=(D&&D.aplicados)||[]; let hubo=false;
     pend=pend.filter(p=>{ const a=ap.find(x=>x.uid===p.uid); if(!a) return true; hubo=true;
-      aviso(a.ok?'Hecho: '+p.texto:'No se ha podido aplicar «'+p.texto+'»: '+(a.error||''),!a.ok); return false; });
+      aviso(a.ok?(a.mensaje||'Hecho: '+p.texto):'No se ha podido aplicar «'+p.texto+'»: '+(a.error||''),!a.ok); return false; });
     if(hubo) guardarPend();
   }
   function cambiar(datos,texto){
@@ -564,13 +574,16 @@ select{font:inherit;font-size:16px;color:var(--ink);background:var(--surface);bo
     document.querySelectorAll('.hoja-fondo').forEach(x=>x.remove());
     const f=document.createElement('div'); f.className='hoja-fondo';
     f.innerHTML=`<form class="hoja" role="dialog" aria-modal="true" aria-label="${esc(titulo)}"><div class="hoja-top"><h2>${esc(titulo)}</h2><button type="button" class="x" aria-label="Cerrar">✕</button></div>
-      ${campos.map(c=>`<label>${esc(c.label)}${c.tipo==='select'?`<select name="${c.id}">${c.opciones.map(o=>`<option ${o===c.valor?'selected':''}>${esc(o)}</option>`).join('')}</select>`
+      ${campos.map(c=>c.tipo==='nota'?`<p class="nota">${c.html}</p>`:c.tipo==='archivo'?`<label>${esc(c.label)}<input name="${c.id}" type="file" multiple accept=".csv,.xlsx,.xls,.txt,text/csv,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"></label>`:`<label>${esc(c.label)}${c.tipo==='select'?`<select name="${c.id}">${c.opciones.map(o=>`<option ${o===c.valor?'selected':''}>${esc(o)}</option>`).join('')}</select>`
         :`<input name="${c.id}" type="${c.tipo==='fecha'?'date':'text'}" ${c.tipo==='num'?'inputmode="decimal"':''} value="${esc(c.valor??'')}" placeholder="${esc(c.ph||'')}" autocomplete="off">`}</label>`).join('')}
       <p class="err" hidden></p><button class="btn" type="submit">${esc(boton)}</button></form>`;
     const cerrar=()=>f.remove();
     f.addEventListener('click',e=>{ if(e.target===f||e.target.closest('.x')) cerrar(); });
-    f.querySelector('form').onsubmit=e=>{ e.preventDefault(); const v={}; campos.forEach(c=>v[c.id]=f.querySelector(`[name="${c.id}"]`).value);
-      const err=alAceptar(v); if(err){ const p=f.querySelector('.err'); p.textContent=err; p.hidden=false; } else cerrar(); };
+    f.querySelector('form').onsubmit=async e=>{ e.preventDefault(); const v={};
+      campos.filter(c=>c.id).forEach(c=>{ const el=f.querySelector(`[name="${c.id}"]`); v[c.id]=c.tipo==='archivo'?el.files:el.value; });
+      const bt=f.querySelector('[type=submit]'), txt=bt.textContent; bt.disabled=true; bt.textContent='Un momento…';
+      const err=await alAceptar(v); bt.disabled=false; bt.textContent=txt;
+      if(err){ const p=f.querySelector('.err'); p.textContent=err; p.hidden=false; } else cerrar(); };
     document.body.append(f); const i=f.querySelector('input'); if(i&&!i.value) setTimeout(()=>i.focus(),50);
   }
 
@@ -600,6 +613,15 @@ select{font:inherit;font-size:16px;color:var(--ink);background:var(--surface);bo
       hoja('Anotar saldo',[{id:'c',label:'Cuenta',tipo:'select',opciones:cuentas,valor:pre},{id:'s',label:'Saldo de hoy (€)',tipo:'num',ph:act!=null?'Ahora: '+eur(act,2):''}],'Guardar',v=>{
         const s=numero(v.s); if(s==null) return 'Escribe el saldo.';
         cambiar({tipo:'saldo',cuenta:v.c,saldo:s},'Saldo de '+v.c+': '+eur(s,2)); }); return; }
+    if(a==='importar'){ const bancos=ed.bancos||[]; if(!bancos.length){ aviso('Abre el programa del ordenador para que envíe tu lista de bancos.',true); return; }
+      hoja('Importar extracto',[{tipo:'nota',html:'Descarga los movimientos en la app de tu banco, guárdalos en <b>Archivos</b> y elígelos aquí. Tu ordenador los importa en cuanto el programa esté abierto.'},
+        {id:'b',label:'¿De qué banco?',tipo:'select',opciones:bancos,valor:bancos[0]},{id:'f',label:'Archivo(s)',tipo:'archivo'}],'Enviar al ordenador',async v=>{
+        const fs=[...(v.f||[])]; if(!fs.length) return 'Elige el archivo del extracto.';
+        if(fs.some(f=>!/\.(csv|xlsx|xls|txt)$/i.test(f.name))) return 'Solo se pueden importar archivos CSV o Excel.';
+        if(fs.reduce((t,f)=>t+f.size,0)>4e6) return 'Los archivos ocupan demasiado (máximo 4 MB en total).';
+        const leer=f=>new Promise((ok,mal)=>{ const r=new FileReader(); r.onload=()=>ok(String(r.result).split(',')[1]||''); r.onerror=mal; r.readAsDataURL(f); });
+        let archivos; try{ archivos=await Promise.all(fs.map(async f=>({nombre:f.name,b64:await leer(f)}))); }catch(e){ return 'No se ha podido leer el archivo.'; }
+        cambiar({tipo:'importar',banco:v.b,archivos},'Importar '+(fs.length===1?'«'+fs[0].name+'»':fs.length+' archivos')+' en '+v.b); }); return; }
     if(a==='gasto'){ const cats=ed.categorias||[], def=['Supermercado','Restaurantes y bares','Compras varias'].find(c=>cats.includes(c))||cats[0];
       hoja('Gasto en efectivo',[{id:'i',label:'Importe (€)',tipo:'num',ph:'p. ej. 4,50'},{id:'c',label:'¿En qué?',ph:'p. ej. Café'},{id:'k',label:'Categoría',tipo:'select',opciones:cats,valor:def},{id:'f',label:'Fecha',tipo:'fecha',valor:hoyISO()}],'Apuntar gasto',v=>{
         const imp=numero(v.i); if(!imp||imp<=0) return 'Escribe el importe.'; if(!v.c.trim()) return 'Escribe en qué te lo has gastado.'; if(!v.f) return 'Indica la fecha.';

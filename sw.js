@@ -1,5 +1,5 @@
 // Guarda la app para que abra al instante y sin conexión (los datos se piden siempre al servidor).
-const CACHE = 'mis-finanzas-v3';
+const CACHE = 'mis-finanzas-v4';
 const ARCHIVOS = ['./', './index.html', './icon-180.png', './icon-192.png', './icon-512.png'];
 
 self.addEventListener('install', e => {
