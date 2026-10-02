@@ -149,8 +149,8 @@ input[type=file]{padding:10px;font-size:14px}
 .hoja-top{display:flex;justify-content:space-between;align-items:center;gap:10px}
 .hoja .x{all:unset;cursor:pointer;font-size:18px;color:var(--muted);padding:4px 8px}
 select{font:inherit;font-size:16px;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px 14px;width:100%}
-.aviso{position:fixed;left:16px;right:16px;bottom:calc(84px + env(safe-area-inset-bottom,0px));z-index:40;max-width:528px;margin:0 auto;background:var(--ink);color:var(--bg);border-radius:12px;padding:12px 14px;font-size:14px;box-shadow:0 6px 24px rgba(0,0,0,.2)}
-.aviso.mal{background:var(--bad);color:#fff}
+.toast-m{position:fixed;left:16px;right:16px;bottom:calc(84px + env(safe-area-inset-bottom,0px));z-index:40;max-width:528px;margin:0 auto;background:var(--ink);color:var(--bg);border-radius:12px;padding:12px 14px;font-size:14px;box-shadow:0 6px 24px rgba(0,0,0,.2)}
+.toast-m.mal{background:var(--bad);color:#fff}
 /* gráficas de evolución interactivas */
 .gx{display:grid;gap:8px;min-width:0}
 .gx-ctrl{display:flex;justify-content:space-between;align-items:center;gap:8px 10px;flex-wrap:wrap}
@@ -376,7 +376,7 @@ select{font:inherit;font-size:16px;color:var(--ink);background:var(--surface);bo
       const puntos=s.tipo==='barras'?'':ser.map(z=>`<circle r="5.5" fill="${z.color}" stroke="var(--surface)" stroke-width="2.5" class="gx-punto" data-n="${escH(z.nombre)}" style="display:none"/>`).join('');
       const rangos=N>7?`<div class="gx-rangos" role="group" aria-label="Periodo">${RANGOS.filter(r=>r[1]<1e9?N>r[1]-(r[0]==='6M'?0:4):true).map(r=>`<button type="button" data-r="${r[0]}" aria-pressed="${st.rango===r[0]}">${r[0]}</button>`).join('')}</div>`:'';
       const ley=s.series.length>1?`<div class="gx-ley">${s.series.map(z=>`<button type="button" data-s="${escH(z.nombre)}" aria-pressed="${!st.ocultas.has(z.nombre)}"><i style="background:${z.color}${z.discontinua?';background:repeating-linear-gradient(90deg,'+z.color+' 0 4px,transparent 4px 6px)':''}"></i>${escH(z.nombre)}</button>`).join('')}</div>`:'';
-      el.innerHTML=`${rangos||ley?`<div class="gx-ctrl">${ley||'<span></span>'}${rangos}</div>`:''}<div class="gx-lectura" aria-live="polite" style="min-height:${18+22*Math.ceil(ser.length/(estrecho?1:2))}px"></div>
+      el.innerHTML=`${rangos||ley?`<div class="gx-ctrl">${ley||'<span></span>'}${rangos}</div>`:''}<div class="gx-lectura" aria-live="polite" style="min-height:${s.pista&&ser.length===1?24:18+22*Math.ceil(ser.length/(estrecho?1:2))}px"></div>
         <svg class="gx-svg" viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" tabindex="0" role="img" aria-label="${escH(ser.map(z=>z.nombre).join(', '))}: arrastra o usa las flechas para ver cada mes">
           ${grid}${ref}<line class="gx-cruz" y1="${T}" y2="${H-B}" style="display:none"/>${cuerpo}${puntos}${ejeX}
           <rect class="gx-zona" x="${L}" y="0" width="${W-L-Rm}" height="${H}" fill="transparent"/></svg>`;
@@ -408,7 +408,8 @@ select{font:inherit;font-size:16px;color:var(--ink);background:var(--surface);bo
     function seleccionar(id,g,i){
       const el=document.getElementById(id); if(!el) return; const s=specs[id], st=est[id], svg=el.querySelector('svg');
       st.sel=i; const k=i==null?g.n-1:i, abs=g.a+k, cruz=svg.querySelector('.gx-cruz');
-      if(i==null&&s.pista){ el.querySelector('.gx-lectura').innerHTML=`<span class="gx-pista">${matchMedia('(pointer:coarse)').matches?'Desliza el dedo':'Mueve el ratón'} por la gráfica para ver cada mes</span>`; }
+      const pista=s.pista&&g.ser.length===1;
+      if(i==null&&pista){ el.querySelector('.gx-lectura').innerHTML=`<span class="gx-pista">${matchMedia('(pointer:coarse)').matches?'Desliza el dedo':'Mueve el ratón'} por la gráfica para ver cada mes</span>`; }
       if(i==null){ cruz.style.display='none'; svg.querySelectorAll('.gx-punto').forEach(p=>p.style.display='none'); svg.querySelectorAll('.gx-barra').forEach(p=>p.classList.remove('apagada')); }
       else { cruz.setAttribute('x1',g.x(k)); cruz.setAttribute('x2',g.x(k)); cruz.style.display='';
         svg.querySelectorAll('.gx-punto').forEach(p=>{ const z=g.ser.find(z=>z.nombre===p.dataset.n), v=z&&z.valores[abs];
@@ -420,9 +421,9 @@ select{font:inherit;font-size:16px;color:var(--ink);background:var(--surface);bo
         const p=abs>0?z.valores[abs-1]:null, dif=p==null?null:v-p;
         let extra='';
         if(s.tipo==='barras'&&s.referencia){ const d=v-s.referencia.valor; extra=`<em class="${d>0?'mal':'bien'}">${d>0?euro(d)+' por encima':euro(-d)+' por debajo'}</em>`; }
-        else if(dif!=null&&s.tipo!=='barras'){ extra=`<em class="${Math.abs(dif)<0.5?'':dif>0?'bien':'mal'}">${dif>0?'+':''}${euro(dif)} vs mes anterior</em>`; }
+        else if(dif!=null&&s.tipo!=='barras'){ extra=`<em class="${Math.abs(dif)<0.5?'':dif>0?'bien':'mal'}" title="respecto al mes anterior">${dif>0?'+':''}${euro(dif)}${g.W<480?'':' vs mes anterior'}</em>`; }
         return `<span>${g.ser.length>1?`<i style="background:${z.color}"></i>`:''}${g.ser.length>1?escH(z.nombre)+' ':''}<b>${euro(v)}</b> ${extra}</span>`; }).join('');
-      if(i==null&&s.pista) return;
+      if(i==null&&pista) return;
       el.querySelector('.gx-lectura').innerHTML=`<span class="gx-fecha">${escH(fecha.replace(/^\w/,c=>c.toUpperCase()))}</span><div class="gx-vals">${filas}</div>`;
     }
     let tRes=null;
@@ -509,15 +510,19 @@ select{font:inherit;font-size:16px;color:var(--ink);background:var(--surface);bo
       return `<div class="row"><span>${esc(x.concepto)} <span class="small muted">· ${x.fecha?fecha(x.fecha):'sin fecha'}</span>
         <div class="acciones">${esp?'<span class="pill esp">Pagado · pendiente de aplicar</span>':`<button class="mini" data-acc="previsto_pagado" data-k="${k}">Ya lo he pagado</button>`}</div></span><span class="r">${eur(x.importe,0)}</span></div>`; }).join('')
       +pend.filter(p=>p.datos.tipo==='nuevo_previsto').map(p=>`<div class="row"><span>${esc(p.datos.concepto)} <div><span class="pill esp">Nuevo · pendiente de aplicar</span></div></span><span class="r">${eur(p.datos.importe,0)}</span></div>`).join('');
-    const deb=(D.te_deben||[]).map((x,k)=>{ const esp=enEspera(p=>['cobrado','pago_parcial'].includes(p.tipo)&&p.i===x.i&&p.persona===x.persona);
+    const ed=D.editable||{};
+    const deb=(D.te_deben||[]).map((x,k)=>{ const esp=enEspera(p=>(['cobrado','pago_parcial'].includes(p.tipo)&&p.i===x.i&&p.persona===x.persona)||(p.tipo==='compensar'&&p.persona===x.persona));
       return `<div class="row"><span>${esc(x.persona)} <span class="small muted">· ${esc(String(x.concepto).split(' (')[0])}</span>
-        <div class="acciones">${esp?`<span class="pill esp">${esp.tipo==='cobrado'?'Pagado':'Pago de '+eur(esp.cantidad,2)} · pendiente de aplicar</span>`
-          :`<button class="mini" data-acc="cobrado" data-k="${k}">Me ha pagado</button><button class="mini sec" data-acc="pago_parcial" data-k="${k}">Pago parcial</button>`}</div></span><span class="r pos">${eur(x.importe,2)}</span></div>`; }).join('')
+        <div class="acciones">${esp?`<span class="pill esp">${esp.tipo==='cobrado'?'Pagado':esp.tipo==='compensar'?'Compensado '+eur(esp.importe,2)+' con '+esc(esp.fijo):'Pago de '+eur(esp.cantidad,2)} · pendiente de aplicar</span>`
+          :`<button class="mini" data-acc="cobrado" data-k="${k}">Me ha pagado</button><button class="mini sec" data-acc="pago_parcial" data-k="${k}">Pago parcial</button>${(ed.fijos||[]).length?`<button class="mini sec" data-acc="compensar" data-persona="${esc(x.persona)}">Compensar</button>`:''}`}</div></span><span class="r pos">${eur(x.importe,2)}</span></div>`; }).join('')
       +pend.filter(p=>p.datos.tipo==='nuevo_deben').map(p=>`<div class="row"><span>${esc(p.datos.persona)} <div><span class="pill esp">Nuevo · pendiente de aplicar</span></div></span><span class="r pos">${eur(p.datos.importe,2)}</span></div>`).join('');
     const deu=(D.deudas||[]).map(x=>`<div class="row"><span>${esc(x.nombre)} <span class="small muted">· ${x.restantes} cuotas</span></span><span class="r neg">${eur(x.pendiente,2)}</span></div>`).join('');
     return `<h1>Cuentas</h1>
       <section style="padding-top:12px"><h2>Dónde está tu dinero</h2><div class="card">${cu}<div class="row"><b>Patrimonio neto</b><b class="r">${eur(netoVivo())}</b></div></div></section>
-      <section><div class="sec-top"><h2>Te deben</h2><button class="mini" data-acc="nuevo_deben">+ Añadir</button></div><div class="card">${deb||'<span class="muted small">Nadie te debe nada.</span>'}</div></section>
+      <section><div class="sec-top"><h2>Te deben</h2><button class="mini" data-acc="nuevo_deben">+ Añadir</button></div><div class="card">${deb||'<span class="muted small">Nadie te debe nada.</span>'}
+        ${(ed.compensaciones||[]).map((c,k)=>{ const esp=enEspera(p=>p.tipo==='borrar_compensacion'&&p.fecha===c.fecha&&p.fijo===c.fijo&&p.persona===c.persona);
+          return `<div class="row"><span>${esc(c.persona)} → ${esc(c.fijo)} <div class="small muted">Compensado el ${fecha(c.fecha)}: ${esc(c.fijo)} te cuesta ${eur(c.importe,2)} menos este mes</div>
+            <div class="acciones">${esp?'<span class="pill esp">Deshacer · pendiente de aplicar</span>':`<button class="mini sec" data-acc="borrar_compensacion" data-k="${k}">Deshacer</button>`}</div></span><span class="r">${eur(c.importe,2)}</span></div>`; }).join('')}</div></section>
       <section><div class="sec-top"><h2>Gastos previstos</h2><button class="mini" data-acc="nuevo_previsto">+ Añadir</button></div><div class="card">${prev||'<span class="muted small">No tienes gastos previstos.</span>'}</div></section>
       ${deu?`<section><h2>Deudas</h2><div class="card">${deu}</div></section>`:''}
       ${fij?`<section><h2>Gastos fijos</h2><div class="card">${fij}</div></section>`:''}
@@ -563,8 +568,8 @@ select{font:inherit;font-size:16px;color:var(--ink);background:var(--surface);bo
       <button class="mini sec" data-acc="deshacer" style="justify-self:start">Anular el último</button></div>`;
   }
   let tAviso=null;
-  function aviso(txt,mal){ document.querySelectorAll('.aviso').forEach(x=>x.remove()); const a=document.createElement('div');
-    a.className='aviso'+(mal?' mal':''); a.setAttribute('role','status'); a.textContent=txt; document.body.append(a);
+  function aviso(txt,mal){ document.querySelectorAll('.toast-m').forEach(x=>x.remove()); const a=document.createElement('div');
+    a.className='toast-m'+(mal?' mal':''); a.setAttribute('role','status'); a.textContent=txt; document.body.append(a);
     clearTimeout(tAviso); tAviso=setTimeout(()=>a.remove(),mal?7000:3500); }
   function numero(v){ v=String(v||'').trim().replace(/\s|€/g,''); if(v.includes(',')) v=v.replace(/\./g,'').replace(',','.'); const n=parseFloat(v); return isFinite(n)?n:null; }
   const hoyISO=()=>{ const d=new Date(); return new Date(d-d.getTimezoneOffset()*6e4).toISOString().slice(0,10); };
@@ -613,6 +618,23 @@ select{font:inherit;font-size:16px;color:var(--ink);background:var(--surface);bo
       hoja('Anotar saldo',[{id:'c',label:'Cuenta',tipo:'select',opciones:cuentas,valor:pre},{id:'s',label:'Saldo de hoy (€)',tipo:'num',ph:act!=null?'Ahora: '+eur(act,2):''}],'Guardar',v=>{
         const s=numero(v.s); if(s==null) return 'Escribe el saldo.';
         cambiar({tipo:'saldo',cuenta:v.c,saldo:s},'Saldo de '+v.c+': '+eur(s,2)); }); return; }
+    if(a==='compensar'){ const per=b.dataset.persona, debe=(D.te_deben||[]).filter(x=>x.persona===per).reduce((t,x)=>t+x.importe,0);
+      const fijos=(ed.fijos||[]).filter(f=>f.libre>0.005); if(!fijos.length){ aviso('Este mes ya has compensado todos tus gastos fijos.',true); return; }
+      const sug=fijos.find(f=>/padre|madre|famil/i.test(f.concepto))||fijos[0], r2=v=>Math.round(v*100)/100;
+      const nota=(fj,c)=>{ const f=fijos.find(x=>x.concepto===fj); if(!f||!c) return ''; if(c>debe+0.005) return per+' solo te debe '+eur(debe,2)+'.'; if(c>f.libre+0.005) return 'Como mucho puedes compensar '+eur(f.libre,2)+' de «'+f.concepto+'».';
+        return 'Este mes transfieres '+eur(f.libre-c,2)+' en vez de '+eur(f.libre,2)+' a «'+f.concepto+'»'+(c>=debe-0.005?' y '+per+' queda saldado/a.':' y '+per+' aún te deberá '+eur(debe-c,2)+'.'); };
+      hoja('Compensar lo que te debe '+per,[{tipo:'nota',html:'Te debe <b>'+eur(debe,2)+'</b>. Si le pagas algo tú cada mes, le transfieres solo la diferencia y su deuda queda saldada. En tu gasto sigue contando el pago completo.'},
+        {id:'f',label:'¿Con qué pago tuyo?',tipo:'select',opciones:fijos.map(f=>f.concepto),valor:sug.concepto},
+        {id:'i',label:'Importe a compensar (€)',tipo:'num',valor:String(r2(Math.min(debe,sug.libre))).replace('.',',')},{tipo:'nota',html:'<span id="comp-nota"></span>'}],'Compensar',v=>{
+        const c=numero(v.i), f=fijos.find(x=>x.concepto===v.f); if(!c||c<=0) return 'Escribe el importe.'; if(c>debe+0.005) return per+' solo te debe '+eur(debe,2)+'.';
+        if(c>f.libre+0.005) return 'Como mucho puedes compensar '+eur(f.libre,2)+' de «'+f.concepto+'» este mes.';
+        cambiar({tipo:'compensar',persona:per,fijo:v.f,importe:r2(c),fecha:hoyISO()},'Compensar '+eur(c,2)+' de '+per+' con «'+v.f+'»'); });
+      const sel=document.querySelector('form.hoja select'), inp=document.querySelector('form.hoja [name=i]'), n=document.getElementById('comp-nota');
+      const act=()=>{ n.textContent=nota(sel.value,numero(inp.value)); };
+      sel.onchange=()=>{ const f=fijos.find(x=>x.concepto===sel.value); inp.value=String(r2(Math.min(debe,f.libre))).replace('.',','); act(); }; inp.oninput=act; act(); return; }
+    if(a==='borrar_compensacion'){ const c=ed.compensaciones[k];
+      hoja('¿Deshacer la compensación?',[{tipo:'nota',html:esc(c.persona)+' volverá a deberte '+eur(c.importe,2)+' y «'+esc(c.fijo)+'» vuelve a su importe normal.'}],'Sí, deshacer',()=>{
+        cambiar({tipo:'borrar_compensacion',fecha:c.fecha,fijo:c.fijo,persona:c.persona},'Deshacer compensación de '+c.persona); }); return; }
     if(a==='importar'){ const bancos=ed.bancos||[]; if(!bancos.length){ aviso('Abre el programa del ordenador para que envíe tu lista de bancos.',true); return; }
       hoja('Importar extracto',[{tipo:'nota',html:'Descarga los movimientos en la app de tu banco, guárdalos en <b>Archivos</b> y elígelos aquí. Tu ordenador los importa en cuanto el programa esté abierto.'},
         {id:'b',label:'¿De qué banco?',tipo:'select',opciones:bancos,valor:bancos[0]},{id:'f',label:'Archivo(s)',tipo:'archivo'}],'Enviar al ordenador',async v=>{
