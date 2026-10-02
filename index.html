@@ -108,7 +108,7 @@ section{padding-block:18px 0;display:grid;gap:12px}
 /* pestañas */
 .tabs{position:fixed;left:0;right:0;bottom:0;z-index:10;background:var(--bar);display:flex;justify-content:space-around;
   padding:8px 8px calc(8px + env(safe-area-inset-bottom,0px))}
-.tabs button{all:unset;cursor:pointer;display:grid;justify-items:center;gap:3px;font-size:11px;font-weight:600;color:var(--bar-muted);padding:4px 10px;border-radius:10px;min-width:58px}
+.tabs button{all:unset;cursor:pointer;display:grid;justify-items:center;gap:3px;font-size:10.5px;font-weight:600;color:var(--bar-muted);padding:4px 4px;border-radius:10px;min-width:54px}
 .tabs button svg{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
 .tabs button[aria-current="page"]{color:var(--bar-ink)}
 .tabs button:focus-visible{outline:2px solid var(--accent)}
@@ -188,6 +188,67 @@ select{font:inherit;font-size:16px;color:var(--ink);background:var(--surface);bo
 .gx-aparece{animation:gx-aparece .9s ease-out both}
 .gx-crece{animation:gx-crece .5s ease-out both}
 @media (prefers-reduced-motion:reduce){.gx-traza,.gx-aparece,.gx-crece{animation:none}}
+/* calculadoras */
+.cx{display:grid;gap:14px}
+.cx-tabs{display:inline-flex;background:var(--soft);border-radius:999px;padding:3px;gap:2px;justify-self:start}
+.cx-tabs button{font:inherit;font-size:13.5px;font-weight:600;border:0;background:none;color:var(--muted);padding:7px 16px;border-radius:999px;cursor:pointer}
+.cx-tabs button[aria-selected="true"]{background:var(--surface);color:var(--ink);box-shadow:0 1px 3px rgba(0,0,0,.12)}
+.cx-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.15fr);gap:18px;align-items:start}
+@media (max-width:760px){.cx-grid{grid-template-columns:1fr}}
+.cx-form{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px 12px;align-items:start}
+@media (max-width:330px){.cx-form{grid-template-columns:1fr}}
+@media (max-width:480px){.cx-campo small{display:none}.cx-in input{padding:8px 8px}.cx-in i{padding:0 8px}}
+.cx-campo{display:grid;gap:4px;font-size:12.5px;color:var(--muted);font-weight:500;min-width:0;align-content:start}
+.cx-campo small{font-size:11.5px;font-weight:400;line-height:1.35}
+.cx-in{display:flex;align-items:center;background:var(--surface);border:1px solid var(--line);border-radius:10px;overflow:hidden}
+.cx-in:focus-within{outline:2px solid var(--accent);border-color:var(--accent)}
+.cx-in input{flex:1;min-width:0;border:0;background:none;font:inherit;font-size:16px;color:var(--ink);padding:9px 10px;font-variant-numeric:tabular-nums;outline:none}
+.cx-in i{font-style:normal;color:var(--muted);padding:0 10px;font-size:13px}
+.cx-res{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:16px;display:grid;gap:4px;min-width:0}
+.cx-cabeza{display:grid;gap:4px;padding-bottom:10px;border-bottom:1px solid var(--line);margin-bottom:4px}
+.cx-cabeza>span:first-child,.cx-max>span:first-child{font-size:11px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:var(--muted)}
+.cx-big{font-family:var(--display,inherit);font-weight:700;font-size:34px;letter-spacing:-.02em;line-height:1.1;font-variant-numeric:tabular-nums}
+.cx-big2{font-family:var(--display,inherit);font-weight:700;font-size:24px;letter-spacing:-.01em;font-variant-numeric:tabular-nums}
+.cx-sub{font-size:12.5px;color:var(--muted)}
+.cx-pill{display:inline-block;font-size:11.5px;font-weight:600;padding:3px 9px;border-radius:999px;width:max-content}
+.cx-pill.ok{background:var(--ok-soft);color:var(--ok)} .cx-pill.aviso{background:var(--warn-soft);color:var(--warn)} .cx-pill.mal{background:var(--bad-soft);color:var(--bad)}
+.cx-fila{display:flex;justify-content:space-between;gap:12px;padding:6px 0;font-size:14px;border-bottom:1px dashed var(--line)}
+.cx-fila b{font-variant-numeric:tabular-nums;white-space:nowrap}
+.cx-fila b.ok{color:var(--ok)} .cx-fila b.aviso{color:var(--warn)} .cx-fila b.mal{color:var(--bad)}
+.cx-txt{font-size:13.5px;margin:8px 0 0;line-height:1.45} .cx-txt.mal{color:var(--bad)}
+.cx-max{margin-top:10px;background:var(--accent-soft);border-radius:12px;padding:12px;display:grid;gap:3px}
+.cx-graf{margin-top:12px}
+.cx-nota{font-size:12px;color:var(--muted);margin:0;line-height:1.45}
+/* análisis */
+.ia-prev{display:grid;gap:8px}
+.ia-rango{position:relative;height:12px;border-radius:99px;background:var(--soft)}
+.ia-rango i{position:absolute;top:0;bottom:0;border-radius:99px;background:var(--info-soft);border:1px solid var(--info)}
+.ia-rango b{position:absolute;top:-4px;bottom:-4px;width:3px;border-radius:2px;background:var(--info)}
+.ia-rango s{position:absolute;top:-6px;bottom:-6px;width:2px;background:var(--ink);opacity:.6;text-decoration:none}
+.ia-escala{display:flex;justify-content:space-between;font-size:11.5px;color:var(--muted);font-variant-numeric:tabular-nums}
+.ia-aviso{display:grid;grid-template-columns:4px minmax(0,1fr);gap:10px;font-size:13.5px;padding:6px 0;line-height:1.45}
+.ia-aviso::before{content:"";border-radius:4px;background:var(--warn)}
+.ia-aviso.mal::before{background:var(--bad)} .ia-aviso.ok::before{background:var(--ok)}
+.ia-cat{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:3px 10px;padding:7px 0;border-top:1px solid var(--line);font-size:13.5px}
+.ia-cat:first-child{border-top:0}
+.ia-barra{grid-column:1/-1;position:relative;height:6px;border-radius:99px;background:var(--soft)}
+.ia-barra i{position:absolute;inset:0 auto 0 0;border-radius:99px;background:var(--c1)}
+.ia-barra i.mal{background:var(--bad)}
+.ia-barra s{position:absolute;top:-3px;bottom:-3px;width:2px;background:var(--ink);opacity:.55}
+.ia-top{display:grid;gap:2px}
+.ia-eyebrow{font-size:11px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:var(--muted)}
+.ia-cifra{font-family:var(--display,inherit);font-weight:700;font-size:28px;letter-spacing:-.02em;display:flex;align-items:center;gap:10px;flex-wrap:wrap;font-variant-numeric:tabular-nums}
+.ia-pill{font-family:var(--body,inherit);font-size:12px;font-weight:600;padding:3px 9px;border-radius:999px;letter-spacing:0}
+.ia-pill.ok{background:var(--ok-soft);color:var(--ok)} .ia-pill.mal{background:var(--bad-soft);color:var(--bad)}
+.ia-txt{font-size:13px;color:var(--muted);margin:0;line-height:1.45}
+.ia-vacio{font-size:13.5px;color:var(--muted);margin:0}
+.ia-num{font-variant-numeric:tabular-nums;white-space:nowrap;text-align:right}
+.ia-muted{color:var(--muted);font-size:12.5px}
+.ia-mal{color:var(--bad);font-weight:600}
+.ia-tabla{display:grid}
+.ia-fila{display:grid;grid-template-columns:minmax(0,1fr) repeat(3,auto);gap:4px 14px;padding:7px 0;border-top:1px solid var(--line);font-size:13.5px}
+.ia-fila:first-child{border-top:0}
+.ia-cab span{font-size:10.5px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
 </style>
 </head>
 <body>
@@ -196,6 +257,7 @@ select{font:inherit;font-size:16px;color:var(--ink);background:var(--surface);bo
   <button data-t="inicio" aria-current="page"><svg viewBox="0 0 24 24"><path d="M3 11l9-7 9 7"/><path d="M5 10v10h14V10"/></svg>Inicio</button>
   <button data-t="cartera"><svg viewBox="0 0 24 24"><path d="M4 19V9m6 10V5m6 14v-7m4 7H2"/></svg>Cartera</button>
   <button data-t="objetivos"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="4"/><circle cx="12" cy="12" r=".5"/></svg>Objetivos</button>
+  <button data-t="planificar"><svg viewBox="0 0 24 24"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M8 7h8M8 11h2M12 11h2M16 11h0M8 15h2M12 15h2M8 18h2M12 18h2M16 15v3"/></svg>Planificar</button>
   <button data-t="cuentas"><svg viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="13" rx="2"/><path d="M3 10h18M7 15h4"/></svg>Cuentas</button>
 </nav>
 
@@ -265,7 +327,8 @@ select{font:inherit;font-size:16px;color:var(--ink);background:var(--surface);bo
   async function sincronizar(){
     try{ const filas=await pedir(version); errorRed=false;
       if(filas.length){ const f=filas[0]; D=await descifrar(clave,f.datos); version=f.version; ultimaSync=f.actualizado;
-        ls.set('mf_cache_'+codigo,JSON.stringify({datos:f.datos,version:f.version,actualizado:f.actualizado})); revisarAplicados(); pintar(); }
+        ls.set('mf_cache_'+codigo,JSON.stringify({datos:f.datos,version:f.version,actualizado:f.actualizado})); revisarAplicados();
+        const foco=document.activeElement; if(!(foco&&foco.closest&&foco.closest('#app')&&/INPUT|SELECT/.test(foco.tagName))) pintar(); else estado(); }
       if(pend.some(p=>!p.enviado)) enviarPend().then(()=>{ if(D) pintar(); });
       else if(!D){ app.innerHTML=`<div class="acceso"><h1>Mis Finanzas</h1><p class="muted">Todavía no hay datos. Abre el programa en tu ordenador para que se envíen.</p></div>`; }
       else estado(); }
@@ -300,8 +363,9 @@ select{font:inherit;font-size:16px;color:var(--ink);background:var(--surface);bo
   function pintar(){
     $('#tabs').hidden=false;
     document.querySelectorAll('#tabs button').forEach(b=>b.setAttribute('aria-current',b.dataset.t===pestana?'page':'false'));
-    app.innerHTML=`<div class="estado" id="estado"></div>`+vEspera()+({inicio:vInicio,cartera:vCartera,objetivos:vObjetivos,cuentas:vCuentas}[pestana])();
+    app.innerHTML=`<div class="estado" id="estado"></div>`+vEspera()+({inicio:vInicio,cartera:vCartera,objetivos:vObjetivos,planificar:vPlanificar,cuentas:vCuentas}[pestana])();
     estado();
+    if(pestana==='planificar'&&subPlan==='calc'){ const r=$('#sim-m'); if(r) CALC.bind(r,D,(el,spec)=>{ el.innerHTML=GX.crear('m-amort',Object.assign({tipo:'linea',alto:170,sinRangos:true,ultimoEsHoy:false,sinDelta:true,etiqueta:ym=>ym.slice(0,4)},spec)); }); }
   }
 
   // ---------- precios en vivo (los manda el ordenador mientras el programa está abierto)
@@ -331,13 +395,15 @@ select{font:inherit;font-size:16px;color:var(--ink);background:var(--surface);bo
     //        alto, rango:'1A', ocultas:[nombres], referencia:{valor,nombre}, colorBarra:(v,i)=>color, ultimoEsHoy:true}
     function crear(id,spec){
       specs[id]=spec;
-      if(!est[id]) est[id]={rango:spec.rango||'1A', ocultas:new Set(spec.ocultas||[]), animada:false};
+      if(!est[id]){ let g=null; try{ g=JSON.parse(localStorage.getItem('gx_'+id)||'null'); }catch(e){}  // lo que elegiste la última vez
+        const validas=new Set(spec.series.map(z=>z.nombre));
+        est[id]={rango:(g&&g.rango)||spec.rango||'1A', ocultas:new Set(g&&g.ocultas?g.ocultas.filter(n=>validas.has(n)):(spec.ocultas||[])), animada:false}; }
       est[id].sel=null;
       setTimeout(()=>dibujar(id),0);
       return `<div class="gx" id="${id}"><div class="gx-hueco" style="height:${(spec.alto||220)+70}px"></div></div>`;
     }
     function visibles(id){ const s=specs[id], st=est[id]; return s.series.filter(x=>!st.ocultas.has(x.nombre)); }
-    function tramo(id){ const s=specs[id], st=est[id], N=s.etiquetas.length;
+    function tramo(id){ const s=specs[id], st=est[id], N=s.etiquetas.length; if(s.sinRangos) return [0,N];
       const n=RANGOS.find(r=>r[0]===st.rango)[1]+(s.tipo==='barras'?0:1); return [Math.max(0,N-n),N]; }
     function dibujar(id){
       const el=document.getElementById(id); if(!el) return;
@@ -358,7 +424,7 @@ select{font:inherit;font-size:16px;color:var(--ink);background:var(--surface);bo
       const grid=tk.map(v=>`<line x1="${L}" x2="${W-Rm}" y1="${y(v)}" y2="${y(v)}" class="gx-grid"/><text x="${L-8}" y="${y(v)+4}" class="gx-eje" text-anchor="end">${corto(v)}</text>`).join('');
       const cada=Math.max(1,Math.ceil(n/(estrecho?5:9)));
       const ejeX=et.map((e,i)=>{ const ult=i===n-1; if(!(ult||(i%cada===0&&n-1-i>=cada*0.6))) return '';
-        const t=ult&&s.ultimoEsHoy!==false?'hoy':etq(e); const anc=s.tipo==='barras'?'middle':i===0?'start':ult?'end':'middle';
+        const t=ult&&s.ultimoEsHoy!==false?'hoy':(s.etiqueta||etq)(e); const anc=s.tipo==='barras'?'middle':i===0?'start':ult?'end':'middle';
         return `<text x="${x(i)}" y="${H-6}" class="gx-eje" text-anchor="${anc}">${t}</text>`; }).join('');
       let cuerpo='';
       if(s.tipo==='barras'){
@@ -374,7 +440,7 @@ select{font:inherit;font-size:16px;color:var(--ink);background:var(--surface);bo
       }
       const ref=s.referencia?`<line x1="${L}" x2="${W-Rm}" y1="${y(s.referencia.valor)}" y2="${y(s.referencia.valor)}" class="gx-ref"/><text x="${W-Rm}" y="${y(s.referencia.valor)-6}" class="gx-eje gx-ref-t" text-anchor="end">${escH(s.referencia.nombre)} ${corto(s.referencia.valor)}</text>`:'';
       const puntos=s.tipo==='barras'?'':ser.map(z=>`<circle r="5.5" fill="${z.color}" stroke="var(--surface)" stroke-width="2.5" class="gx-punto" data-n="${escH(z.nombre)}" style="display:none"/>`).join('');
-      const rangos=N>7?`<div class="gx-rangos" role="group" aria-label="Periodo">${RANGOS.filter(r=>r[1]<1e9?N>r[1]-(r[0]==='6M'?0:4):true).map(r=>`<button type="button" data-r="${r[0]}" aria-pressed="${st.rango===r[0]}">${r[0]}</button>`).join('')}</div>`:'';
+      const rangos=N>7&&!s.sinRangos?`<div class="gx-rangos" role="group" aria-label="Periodo">${RANGOS.filter(r=>r[1]<1e9?N>r[1]-(r[0]==='6M'?0:4):true).map(r=>`<button type="button" data-r="${r[0]}" aria-pressed="${st.rango===r[0]}">${r[0]}</button>`).join('')}</div>`:'';
       const ley=s.series.length>1?`<div class="gx-ley">${s.series.map(z=>`<button type="button" data-s="${escH(z.nombre)}" aria-pressed="${!st.ocultas.has(z.nombre)}"><i style="background:${z.color}${z.discontinua?';background:repeating-linear-gradient(90deg,'+z.color+' 0 4px,transparent 4px 6px)':''}"></i>${escH(z.nombre)}</button>`).join('')}</div>`:'';
       el.innerHTML=`${rangos||ley?`<div class="gx-ctrl">${ley||'<span></span>'}${rangos}</div>`:''}<div class="gx-lectura" aria-live="polite" style="min-height:${s.pista&&ser.length===1?24:18+22*Math.ceil(ser.length/(estrecho?1:2))}px"></div>
         <svg class="gx-svg" viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" tabindex="0" role="img" aria-label="${escH(ser.map(z=>z.nombre).join(', '))}: arrastra o usa las flechas para ver cada mes">
@@ -399,15 +465,16 @@ select{font:inherit;font-size:16px;color:var(--ink);background:var(--surface);bo
       svg.addEventListener('keydown',e=>{ if(e.key!=='ArrowLeft'&&e.key!=='ArrowRight') return; e.preventDefault();
         const i=st.sel==null?n-1:st.sel+(e.key==='ArrowLeft'?-1:1); seleccionar(id,geo,Math.max(0,Math.min(n-1,i))); });
       svg.addEventListener('blur',()=>seleccionar(id,geo,null));
-      el.querySelectorAll('[data-r]').forEach(bt=>bt.onclick=()=>{ st.rango=bt.dataset.r; dibujar(id); });
+      const recordar=()=>{ try{ localStorage.setItem('gx_'+id,JSON.stringify({rango:st.rango,ocultas:[...st.ocultas]})); }catch(e){} };
+      el.querySelectorAll('[data-r]').forEach(bt=>bt.onclick=()=>{ st.rango=bt.dataset.r; recordar(); dibujar(id); });
       el.querySelectorAll('[data-s]').forEach(bt=>bt.onclick=()=>{ const nm=bt.dataset.s;
-        if(st.ocultas.has(nm)) st.ocultas.delete(nm); else if(visibles(id).length>1) st.ocultas.add(nm); dibujar(id); });
+        if(st.ocultas.has(nm)) st.ocultas.delete(nm); else if(visibles(id).length>1) st.ocultas.add(nm); recordar(); dibujar(id); });
       seleccionar(id,geo,null);
     }
     // muestra los valores del mes elegido (o del último si no hay ninguno elegido)
     function seleccionar(id,g,i){
       const el=document.getElementById(id); if(!el) return; const s=specs[id], st=est[id], svg=el.querySelector('svg');
-      st.sel=i; const k=i==null?g.n-1:i, abs=g.a+k, cruz=svg.querySelector('.gx-cruz');
+      st.sel=i; const k=i==null?(s.inicial!=null&&s.inicial>=g.a&&s.inicial<g.a+g.n?s.inicial-g.a:g.n-1):i, abs=g.a+k, cruz=svg.querySelector('.gx-cruz');
       const pista=s.pista&&g.ser.length===1;
       if(i==null&&pista){ el.querySelector('.gx-lectura').innerHTML=`<span class="gx-pista">${matchMedia('(pointer:coarse)').matches?'Desliza el dedo':'Mueve el ratón'} por la gráfica para ver cada mes</span>`; }
       if(i==null){ cruz.style.display='none'; svg.querySelectorAll('.gx-punto').forEach(p=>p.style.display='none'); svg.querySelectorAll('.gx-barra').forEach(p=>p.classList.remove('apagada')); }
@@ -416,12 +483,12 @@ select{font:inherit;font-size:16px;color:var(--ink);background:var(--surface);bo
           if(v==null){ p.style.display='none'; return; } p.setAttribute('cx',g.x(k)); p.setAttribute('cy',g.y(v)); p.style.display=''; });
         svg.querySelectorAll('.gx-barra').forEach(p=>p.classList.toggle('apagada',+p.dataset.i!==k)); }
       const ult=abs===s.etiquetas.length-1;
-      const fecha=ult&&s.ultimoEsHoy!==false?(s.tipo==='barras'?etq(s.etiquetas[abs],true)+' (en curso)':'Hoy'):etq(s.etiquetas[abs],true);
+      const fecha=ult&&s.ultimoEsHoy!==false?(s.tipo==='barras'?etq(s.etiquetas[abs],true)+' (en curso)':'Hoy'):(s.etiqueta||etq)(s.etiquetas[abs],true);
       const filas=g.ser.map(z=>{ const v=z.valores[abs]; if(v==null) return '';
         const p=abs>0?z.valores[abs-1]:null, dif=p==null?null:v-p;
         let extra='';
         if(s.tipo==='barras'&&s.referencia){ const d=v-s.referencia.valor; extra=`<em class="${d>0?'mal':'bien'}">${d>0?euro(d)+' por encima':euro(-d)+' por debajo'}</em>`; }
-        else if(dif!=null&&s.tipo!=='barras'){ extra=`<em class="${Math.abs(dif)<0.5?'':dif>0?'bien':'mal'}" title="respecto al mes anterior">${dif>0?'+':''}${euro(dif)}${g.W<480?'':' vs mes anterior'}</em>`; }
+        else if(dif!=null&&s.tipo!=='barras'&&!s.sinDelta){ extra=`<em class="${Math.abs(dif)<0.5?'':dif>0?'bien':'mal'}" title="respecto al mes anterior">${dif>0?'+':''}${euro(dif)}${g.W<480?'':' vs mes anterior'}</em>`; }
         return `<span>${g.ser.length>1?`<i style="background:${z.color}"></i>`:''}${g.ser.length>1?escH(z.nombre)+' ':''}<b>${euro(v)}</b> ${extra}</span>`; }).join('');
       if(i==null&&pista) return;
       el.querySelector('.gx-lectura').innerHTML=`<span class="gx-fecha">${escH(fecha.replace(/^\w/,c=>c.toUpperCase()))}</span><div class="gx-vals">${filas}</div>`;
@@ -429,6 +496,148 @@ select{font:inherit;font-size:16px;color:var(--ink);background:var(--surface);bo
     let tRes=null;
     window.addEventListener('resize',()=>{ clearTimeout(tRes); tRes=setTimeout(()=>Object.keys(specs).forEach(id=>{ if(document.getElementById(id)) dibujar(id); }),150); });
     return {crear};
+  })();
+
+  // ================= CALCULADORAS «¿ME LO PUEDO PERMITIR?» =================
+  // Vivienda (hipoteca), coche y préstamo. Se rellenan con tus datos reales (ingreso medio, ahorro, cuotas,
+  // gasolina) y se recalculan al escribir. Reglas habituales de la banca en España; es orientativo.
+  const CALC=(()=>{
+    const g3=n=>n.replace(/\B(?=(\d{3})+(?!\d))/g,'.');
+    const euro=(v,d)=>{ if(v==null||!isFinite(v)) return '—'; const s=Math.abs(v).toFixed(d||0).split('.'); return (v<0?'−':'')+g3(s[0])+(d?','+s[1]:'')+' €'; };
+    const pc=v=>isFinite(v)?(v*100).toFixed(1).replace('.',',')+' %':'—';
+    const num=v=>{ v=String(v??'').trim().replace(/\s|€|%/g,''); if(v.includes(',')||/^\d{1,3}(\.\d{3})+$/.test(v)) v=v.replace(/\./g,'').replace(',','.'); const n=parseFloat(v); return isFinite(n)?n:0; };
+    const inN=v=>{ const r=Math.round(v*100)/100, [e,d]=String(Math.abs(r)).split('.'); return (r<0?'-':'')+(Math.abs(r)>=1000?g3(e):e)+(d?','+d:''); };
+    const escH=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+    const cuota=(P,tin,n)=>{ if(P<=0||n<=0) return 0; const i=tin/100/12; return i?P*i/(1-Math.pow(1+i,-n)):P/n; };
+    const capital=(c,tin,n)=>{ if(c<=0||n<=0) return 0; const i=tin/100/12; return i?c*(1-Math.pow(1+i,-n))/i:c*n; };
+    let tab='vivienda'; const val={};
+    const nivel=(x,ok,lim)=>x<=ok?'ok':x<=lim?'aviso':'mal';
+    const sem={ok:'Cómodo',aviso:'Al límite',mal:'Demasiado'};
+
+    function campos(cap,liq){ return {
+      vivienda:[['ingreso','Ingresos netos al mes',cap.ingreso,'€','Tu media real. Suma la de tu pareja si compráis juntos.'],
+        ['ahorro','Ahorro para la compra',liq,'€','Lo que tienes hoy en cuentas (sin la cartera).'],
+        ['precio','Precio de la vivienda',150000,'€'],['tin','Interés (TIN fijo)',3,'%'],['anos','Plazo',30,'años'],
+        ['fin','Financiación del banco',80,'%','Lo normal es el 80 % del precio.'],['gastos','Impuestos y gastos de compra',10,'%','ITP o IVA, notaría, registro… entre 8 y 12 % según la comunidad.'],
+        ['otras','Otras cuotas al mes',cap.cuotas_deudas,'€','Tus préstamos actuales.']],
+      coche:[['ingreso','Ingresos netos al mes',cap.ingreso,'€'],['precio','Precio del coche',15000,'€'],['entrada','Entrada',3000,'€'],
+        ['tin','Interés (TIN)',7.5,'%'],['meses','Plazo',60,'meses'],['seguro','Seguro al mes',45,'€'],
+        ['gasolina','Gasolina al mes',cap.gasolina_media||100,'€','Tu media real de gasolina.'],['mant','Mantenimiento al mes',40,'€','Revisiones, ruedas, ITV…'],
+        ['otras','Otras cuotas al mes',cap.cuotas_deudas,'€']],
+      prestamo:[['ingreso','Ingresos netos al mes',cap.ingreso,'€'],['importe','Importe',3000,'€'],['tin','Interés (TIN)',8,'%'],['meses','Plazo',24,'meses'],
+        ['otras','Otras cuotas al mes',cap.cuotas_deudas,'€']]}; }
+
+    function render(D){
+      const it=D.inteligencia||{}, cap=it.capacidad||{ingreso:(D.nomina||{}).ingreso||0,cuotas_deudas:0,ahorro_mensual:0};
+      const liq=(D.patrimonio||{}).liquidez||0, cs=campos(cap,liq);
+      for(const t in cs){ val[t]=val[t]||{}; cs[t].forEach(([k,,d])=>{ if(val[t][k]==null) val[t][k]=Math.round((d||0)*100)/100; }); }
+      const tabs=[['vivienda','Vivienda'],['coche','Coche'],['prestamo','Préstamo']];
+      return `<div class="cx" id="cx">
+        <div class="cx-tabs" role="tablist">${tabs.map(([k,t])=>`<button type="button" role="tab" data-cxt="${k}" aria-selected="${tab===k}">${t}</button>`).join('')}</div>
+        <div class="cx-grid"><form class="cx-form" onsubmit="return false">${cs[tab].map(([k,l,,u,h])=>`<label class="cx-campo"><span>${l}</span>
+          <span class="cx-in"><input data-cx="${k}" inputmode="decimal" value="${inN(val[tab][k])}"><i>${u}</i></span>${h?`<small>${h}</small>`:''}</label>`).join('')}</form>
+        <div class="cx-res" id="cx-res" aria-live="polite"></div></div>
+        <p class="cx-nota">Cálculo orientativo con las reglas habituales de los bancos en España (cuota de préstamos ≤ 35 % de tus ingresos, financiación del 80 % en vivienda). No es asesoramiento financiero: antes de firmar, pide al banco la oferta vinculante (FEIN) con la TAE.</p></div>`;
+    }
+
+    function calcular(D){
+      const v=val[tab], it=D.inteligencia||{}, cap=it.capacidad||{}, ahM=cap.ahorro_mensual, out=[];
+      const fila=(t,x,cls)=>`<div class="cx-fila"><span>${t}</span><b class="${cls||''}">${x}</b></div>`;
+      const pill=(n,t)=>`<span class="cx-pill ${n}">${t||sem[n]}</span>`;
+      const tiempo=falta=>{ if(falta<=0) return ''; if(!(ahM>0)) return `<p class="cx-txt mal">Te faltan ${euro(falta)}. Con tu ritmo actual (${ahM!=null?euro(ahM)+'/mes de media':'sin ahorro'}) no llegarías: antes tendrías que gastar menos de lo que ingresas.</p>`;
+        const m=Math.ceil(falta/ahM); return `<p class="cx-txt">Te faltan ${euro(falta)}. Ahorrando como ahora (${euro(ahM)}/mes) los tendrías en <b>${m<24?m+' meses':(m/12).toFixed(1).replace('.',',')+' años'}</b>.</p>`; };
+      let html='', grafica=null;
+      if(tab==='vivienda'){
+        const P=v.precio*v.fin/100, n=v.anos*12, c=cuota(P,v.tin,n), entrada=v.precio-P, gastos=v.precio*v.gastos/100, necesita=entrada+gastos;
+        const esf=v.ingreso?(c+v.otras)/v.ingreso:Infinity, niv=nivel(esf,0.30,0.35), intereses=c*n-P;
+        const cMax=Math.max(0,0.35*v.ingreso-v.otras), porIngresos=capital(cMax,v.tin,n)/(v.fin/100), porAhorro=v.ahorro/(1-v.fin/100+v.gastos/100), maxP=Math.min(porIngresos,porAhorro);
+        html=`<div class="cx-cabeza"><span>Cuota al mes</span><div class="cx-big">${euro(c)}</div>${pill(niv)} <span class="cx-sub">${pc(esf)} de tus ingresos con tus otras cuotas</span></div>
+          ${fila('Hipoteca ('+v.fin+' %)',euro(P))}${fila('Entrada que pones tú',euro(entrada))}${fila('Impuestos y gastos',euro(gastos))}
+          ${fila('Ahorro necesario',euro(necesita),necesita>v.ahorro?'mal':'ok')}${fila('Intereses en '+v.anos+' años',euro(intereses))}${fila('Pagarás en total',euro(c*n+entrada+gastos))}
+          ${tiempo(necesita-v.ahorro)}
+          <div class="cx-max"><span>Lo máximo que te podrías permitir hoy</span><div class="cx-big2">${euro(Math.max(0,maxP))}</div>
+            <span class="cx-sub">Por tus ingresos (cuota ≤ 35 %): ${euro(porIngresos)} · por tu ahorro: ${euro(porAhorro)}. Te limita ${porAhorro<porIngresos?'<b>el ahorro</b> (entrada + gastos)':'<b>el sueldo</b>'}.</span></div>`;
+        // capital pendiente e intereses pagados, año a año
+        const et=[], pend=[], intAc=[]; let saldo=P, ia=0; const i=v.tin/100/12, y0=new Date().getFullYear();
+        for(let a=0;a<=Math.min(v.anos,40);a++){ et.push((y0+a)+'-01'); pend.push(Math.round(saldo)); intAc.push(Math.round(ia));
+          for(let m=0;m<12&&saldo>0.01;m++){ const int=saldo*i; ia+=int; saldo=Math.max(0,saldo-(c-int)); } }
+        grafica={inicial:Math.min(10,et.length-1),etiquetas:et,series:[{nombre:'Te queda por pagar',color:'var(--c1)',area:true,valores:pend},{nombre:'Intereses pagados',color:'var(--c2)',valores:intAc}]};
+      } else if(tab==='coche'){
+        const P=Math.max(0,v.precio-v.entrada), c=cuota(P,v.tin,v.meses), uso=v.seguro+v.gasolina+v.mant, total=c+uso;
+        const pCuota=v.ingreso?(c+v.otras)/v.ingreso:Infinity, pTotal=v.ingreso?total/v.ingreso:Infinity;
+        const recPorCuota=capital(Math.max(0,0.10*v.ingreso),v.tin,v.meses)+v.entrada, recAnual=0.35*v.ingreso*12, rec=Math.min(recPorCuota,recAnual);
+        html=`<div class="cx-cabeza"><span>Cuota al mes</span><div class="cx-big">${euro(c)}</div>${pill(nivel(v.ingreso?c/v.ingreso:1,0.10,0.15))} <span class="cx-sub">${pc(v.ingreso?c/v.ingreso:NaN)} de tus ingresos (recomendado ≤ 10 %)</span></div>
+          ${fila('Financias',euro(P))}${fila('Intereses',euro(c*v.meses-P))}${fila('Coche + intereses',euro(c*v.meses+v.entrada))}
+          ${fila('Seguro + gasolina + mantenimiento',euro(uso)+'/mes')}${fila('Te cuesta al mes en total',euro(total),pTotal>0.2?'mal':'')}
+          ${fila('Coche sobre tus ingresos',pc(pTotal),pTotal>0.2?'mal':pTotal>0.15?'aviso':'ok')}${fila('Todas tus cuotas sobre ingresos',pc(pCuota),pCuota>0.35?'mal':'')}
+          ${v.entrada>0?tiempo(v.entrada-((D.patrimonio||{}).liquidez||0)):''}
+          <div class="cx-max"><span>Precio de coche recomendado para ti</span><div class="cx-big2">hasta ${euro(Math.max(0,rec))}</div>
+            <span class="cx-sub">Con cuota ≤ 10 % de tus ingresos a ${v.meses} meses y sin pasar del 35 % de tu sueldo anual. Todo el coche (cuota + uso) debería quedar por debajo del 15–20 % de lo que ingresas.</span></div>`;
+      } else {
+        const c=cuota(v.importe,v.tin,v.meses), esf=v.ingreso?(c+v.otras)/v.ingreso:Infinity;
+        html=`<div class="cx-cabeza"><span>Cuota al mes</span><div class="cx-big">${euro(c,2)}</div>${pill(nivel(esf,0.30,0.35))} <span class="cx-sub">${pc(esf)} de tus ingresos con tus otras cuotas</span></div>
+          ${fila('Intereses',euro(c*v.meses-v.importe,2))}${fila('Devolverás en total',euro(c*v.meses,2))}
+          ${fila('Coste por cada 100 € pedidos',euro((c*v.meses/v.importe-1)*100,2))}
+          ${ahM!=null?`<p class="cx-txt">${ahM>0?`Ahorrando ${euro(ahM)}/mes como ahora, en vez de pedirlo podrías reunir ${euro(v.importe)} en ${Math.ceil(v.importe/ahM)} meses y no pagar intereses.`:`Ahora gastas más de lo que ingresas (${euro(ahM)}/mes de media): una cuota más lo complicaría.`}</p>`:''}`;
+      }
+      return {html,grafica};
+    }
+
+    function bind(root,D,dibujar){
+      const pintarRes=()=>{ const r=calcular(D), res=root.querySelector('#cx-res'); res.innerHTML=r.html+(r.grafica?'<div class="cx-graf" id="cx-graf-w"></div>':'');
+        if(r.grafica&&dibujar) dibujar(res.querySelector('#cx-graf-w'),r.grafica); };
+      root.querySelectorAll('[data-cxt]').forEach(b=>b.onclick=()=>{ tab=b.dataset.cxt; const cx=root.querySelector('#cx'); const nuevo=document.createElement('div'); nuevo.innerHTML=render(D); cx.replaceWith(nuevo.firstElementChild); bind(root,D,dibujar); });
+      root.querySelectorAll('[data-cx]').forEach(inp=>inp.oninput=()=>{ val[tab][inp.dataset.cx]=num(inp.value); pintarRes(); });
+      pintarRes();
+    }
+    return {render,bind};
+  })();
+
+  // ================= LO QUE EL PROGRAMA APRENDE DE TUS EXTRACTOS =================
+  const IA=(()=>{
+    const g3=n=>n.replace(/\B(?=(\d{3})+(?!\d))/g,'.');
+    const euro=v=>{ if(v==null||!isFinite(v)) return '—'; const s=Math.abs(Math.round(v)).toString(); return (v<0?'−':'')+g3(s)+' €'; };
+    const escH=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+    const ML=['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
+    const MC=['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'];
+    const I=D=>D.inteligencia||null;
+    function prevision(D){
+      const it=I(D); if(!it) return '<p class="ia-vacio">Necesito al menos 3 meses con todos tus bancos para aprender tus gastos.</p>';
+      const p=it.prevision, pres=(D.mes||{}).presupuesto||0, mes=ML[new Date().getMonth()];
+      const tope=Math.max(p.maximo||0,pres,p.prevision||0)*1.08||1, pos=v=>Math.max(0,Math.min(100,v/tope*100));
+      const dif=pres?p.prevision-pres:null;
+      return `<div class="ia-prev">
+        <div class="ia-top"><span class="ia-eyebrow">Previsión de ${mes}</span>
+          <div class="ia-cifra">≈ ${euro(p.prevision)}${dif!=null?` <span class="ia-pill ${dif>0?'mal':'ok'}">${dif>0?euro(dif)+' por encima':euro(-dif)+' por debajo'} del presupuesto</span>`:''}</div></div>
+        <div class="ia-rango" role="img" aria-label="Previsión entre ${euro(p.minimo)} y ${euro(p.maximo)}"><i style="left:${pos(p.minimo)}%;width:${Math.max(1,pos(p.maximo)-pos(p.minimo))}%"></i><b style="left:${pos(p.prevision)}%"></b>${pres?`<s style="left:${pos(pres)}%" title="Presupuesto"></s>`:''}</div>
+        <div class="ia-escala"><span>Llevas ${euro(p.gastado)}</span>${pres?`<span>Presupuesto ${euro(pres)}</span>`:''}</div>
+        <p class="ia-txt">Día ${p.dia}: llevas ${euro(p.gastado)}. Lo que sueles gastar de aquí a fin de mes (según tus últimos ${p.meses_base} meses) lo deja en <b>≈ ${euro(p.prevision)}</b>, entre ${euro(p.minimo)} y ${euro(p.maximo)}. Tu media mensual es ${euro(p.media)}.</p></div>`;
+    }
+    function avisos(D,max){
+      const it=I(D); if(!it) return ''; const a=(it.avisos||[]).slice(0,max||6);
+      return a.length?a.map(x=>`<div class="ia-aviso ${x.nivel}"><span>${escH(x.texto)}</span></div>`).join(''):'<p class="ia-vacio">Todo en orden: tus gastos van como siempre.</p>';
+    }
+    function categorias(D){
+      const it=I(D); if(!it) return '';
+      const cs=(it.categorias||[]).filter(c=>c.media>=5||c.actual>=5).slice(0,10), tope=Math.max(1,...cs.map(c=>Math.max(c.media,c.actual)));
+      return cs.map(c=>`<div class="ia-cat"><span>${escH(c.categoria)}</span><span class="ia-num">${euro(c.actual)} <span class="ia-muted">/ media ${euro(c.media)}</span></span>
+        <div class="ia-barra"><i class="${c.actual>c.media&&c.media>0?'mal':''}" style="width:${(c.actual/tope*100).toFixed(1)}%"></i><s style="left:${(c.media/tope*100).toFixed(1)}%" title="Tu media"></s></div></div>`).join('');
+    }
+    function grupos(D){
+      const it=I(D); if(!it) return '';
+      return `<div class="ia-tabla">${(it.grupos||[]).map(g=>{ const d=(g.real||0)-(g.presupuesto||0), mal=g.presupuesto&&g.real>g.presupuesto*1.1;
+        return `<div class="ia-fila"><span>${escH(g.grupo)}</span><span class="ia-num">${g.presupuesto?euro(g.presupuesto):'—'}</span><span class="ia-num ${mal?'ia-mal':''}">${euro(g.real)}</span><span class="ia-num ${mal?'ia-mal':'ia-muted'}">${g.presupuesto?(d>0?'+':'')+euro(d):''}</span></div>`; }).join('')}</div>`;
+    }
+    // barras de los 12 meses del año (para GX)
+    function estacion(D){
+      const it=I(D); if(!it) return null; const e=it.estacionalidad||[], y=new Date().getFullYear(), ahora=new Date().getMonth();
+      const media=e.filter(x=>x.n).reduce((a,x)=>a+x.media,0)/Math.max(1,e.filter(x=>x.n).length);
+      return {tipo:'barras',alto:200,sinRangos:true,ultimoEsHoy:false,inicial:ahora,etiquetas:e.map(x=>y+'-'+String(x.mes).padStart(2,'0')),
+        etiqueta:(ym,largo)=>{ const m=+ym.slice(5,7)-1; return largo?ML[m]+' (media de '+(e[m].n||0)+' años)':MC[m]; },
+        series:[{nombre:'Gasto medio',color:'var(--c1)',valores:e.map(x=>x.n?x.media:null)}],referencia:{valor:media,nombre:'Mes normal'},
+        colorBarra:(v,i)=>i===ahora?'var(--c4)':(v>media*1.15?'var(--c8)':'var(--c3)')};
+    }
+    return {prevision,avisos,categorias,grupos,estacion,desde:D=>I(D)&&I(D).desde,meses:D=>I(D)&&I(D).meses_fiables};
   })();
 
   // ---------- vistas
@@ -447,7 +656,7 @@ select{font:inherit;font-size:16px;color:var(--ink);background:var(--surface);bo
     return `<div class="hero"><span class="eyebrow">Patrimonio neto</span><div class="big num">${eur(neto,0)}</div>${chip}
       <div class="split num"><span>Invertido <b>${eur(valorCartera(),0)}</b></span><span>Liquidez <b>${eur(p.liquidez,0)}</b></span>${p.deudas?`<span>Deudas <b class="neg">${eur(-p.deudas,0)}</b></span>`:''}</div>
       </div>
-      <section><div class="card">${GX.crear('m-pat',{tipo:'linea',pista:true,alto:170,etiquetas:evol.map(e=>e.mes),ocultas:['Inversiones','Liquidez','Deudas'],series:[
+      <section><div class="card">${GX.crear('m-pat',{tipo:'linea',pista:true,alto:170,etiquetas:evol.map(e=>e.mes),ocultas:['Inversiones','Liquidez'],series:[
         {nombre:'Patrimonio',color:'var(--c1)',area:true,valores:evol.map((e,i)=>i===evol.length-1?neto:e.neto)},
         {nombre:'Inversiones',color:'var(--c3)',valores:evol.map((e,i)=>i===evol.length-1?valorCartera():e.cartera)},
         {nombre:'Liquidez',color:'var(--c4)',valores:evol.map(e=>e.liquidez)},
@@ -456,6 +665,7 @@ select{font:inherit;font-size:16px;color:var(--ink);background:var(--surface);bo
       ${semana}
       <section><h2>${mesTxt(m.mes).replace(/^\w/,c=>c.toUpperCase())}</h2><div class="card">
         <div><span class="eyebrow">Gastado</span><div class="total num">${eur(m.gastado,0)} <span class="small muted" style="font-family:var(--body);font-weight:400">de ${eur(m.presupuesto,0)}</span></div>${barra(m.gastado,m.presupuesto,ritmo)}</div>${grupos}</div></section>
+      ${D.inteligencia?`<section><div class="sec-top"><h2>Lo que he aprendido</h2><button class="mini" data-ir-tab="planificar">Ver análisis</button></div><div class="card">${IA.prevision(D)}${IA.avisos(D,2)}</div></section>`:''}
       ${evol.length>1?`<section><h2>Gasto de cada mes</h2><div class="card">${GX.crear('m-gasto',{tipo:'barras',alto:160,etiquetas:evol.map(e=>e.mes),
         series:[{nombre:'Gasto',color:'var(--c1)',valores:evol.map(e=>e.gasto||0)}],referencia:m.presupuesto?{valor:m.presupuesto,nombre:'Presupuesto'}:null,
         colorBarra:(v,i)=>i===evol.length-1?'var(--c1)':(m.presupuesto&&v>m.presupuesto?'var(--c8)':'var(--c3)')})}</div></section>`:''}
@@ -466,6 +676,21 @@ select{font:inherit;font-size:16px;color:var(--ink);background:var(--surface);bo
       <button data-acc="gasto">Gasto en efectivo<span>Apúntalo al momento</span></button>
       <button data-acc="saldo">Anotar un saldo<span>Trust Wallet, bancos…</span></button></div></section>`;
   }
+  let subPlan='analisis';
+  function vPlanificar(){
+    const seg=`<div class="cx-tabs" role="tablist" style="margin-top:12px">${[['analisis','Análisis'],['calc','¿Me lo puedo permitir?']].map(([k,t])=>`<button type="button" data-sub="${k}" aria-selected="${subPlan===k}">${t}</button>`).join('')}</div>`;
+    if(subPlan==='calc') return `<h1>Planificar</h1>${seg}<section style="padding-top:12px"><div class="card" id="sim-m">${CALC.render(D)}</div></section>`;
+    const est=IA.estacion(D), desde=IA.desde(D);
+    return `<h1>Planificar</h1>${seg}
+      <section style="padding-top:12px"><div class="card">${IA.prevision(D)}</div></section>
+      <section><h2>Lo que he aprendido</h2><div class="card">${IA.avisos(D)}</div></section>
+      ${est?`<section><h2>Tus meses del año</h2><div class="card">${GX.crear('m-estac',Object.assign({},est,{alto:160}))}</div></section>`:''}
+      <section><h2>Presupuesto frente a la realidad</h2><div class="card"><div class="ia-fila ia-cab"><span>Grupo</span><span class="ia-num">Presup.</span><span class="ia-num">Gastas</span><span class="ia-num">Dif.</span></div>${IA.grupos(D)}</div></section>
+      <section><h2>Este mes por categoría</h2><div class="card">${IA.categorias(D)}</div></section>
+      ${desde?`<p class="small muted" style="margin:14px 0 0">Aprendido de ${IA.meses(D)} meses de tus extractos (desde ${mesTxt(desde)}). Se rehace solo cada vez que importas.</p>`:''}`;
+  }
+  document.addEventListener('click',e=>{ const b=e.target.closest('[data-sub]'); if(b){ subPlan=b.dataset.sub; pintar(); scrollTo(0,0); }
+    const ir=e.target.closest('[data-ir-tab]'); if(ir){ pestana=ir.dataset.irTab; subPlan='analisis'; pintar(); scrollTo(0,0); } });
   function vCartera(){
     const c=D.cartera, P=c.posiciones||[], v=D.vivo, vr=vivo();
     if(!P.length) return `<h1>Cartera</h1><p class="muted">Aún no hay inversiones.</p>`;
