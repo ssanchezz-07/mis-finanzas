@@ -447,10 +447,11 @@ select{font:inherit;font-size:16px;color:var(--ink);background:var(--surface);bo
     return `<div class="hero"><span class="eyebrow">Patrimonio neto</span><div class="big num">${eur(neto,0)}</div>${chip}
       <div class="split num"><span>Invertido <b>${eur(valorCartera(),0)}</b></span><span>Liquidez <b>${eur(p.liquidez,0)}</b></span>${p.deudas?`<span>Deudas <b class="neg">${eur(-p.deudas,0)}</b></span>`:''}</div>
       </div>
-      <section><div class="card">${GX.crear('m-pat',{tipo:'linea',pista:true,alto:170,etiquetas:evol.map(e=>e.mes),ocultas:['Inversiones','Liquidez'],series:[
+      <section><div class="card">${GX.crear('m-pat',{tipo:'linea',pista:true,alto:170,etiquetas:evol.map(e=>e.mes),ocultas:['Inversiones','Liquidez','Deudas'],series:[
         {nombre:'Patrimonio',color:'var(--c1)',area:true,valores:evol.map((e,i)=>i===evol.length-1?neto:e.neto)},
         {nombre:'Inversiones',color:'var(--c3)',valores:evol.map((e,i)=>i===evol.length-1?valorCartera():e.cartera)},
-        {nombre:'Liquidez',color:'var(--c4)',valores:evol.map(e=>e.liquidez)}]})}</div></section>
+        {nombre:'Liquidez',color:'var(--c4)',valores:evol.map(e=>e.liquidez)},
+        {nombre:'Deudas',color:'var(--c8)',valores:evol.map(e=>e.deuda==null?null:-e.deuda)}]})}</div></section>
       ${vRapidas()}
       ${semana}
       <section><h2>${mesTxt(m.mes).replace(/^\w/,c=>c.toUpperCase())}</h2><div class="card">
@@ -512,7 +513,7 @@ select{font:inherit;font-size:16px;color:var(--ink);background:var(--surface);bo
       +pend.filter(p=>p.datos.tipo==='nuevo_previsto').map(p=>`<div class="row"><span>${esc(p.datos.concepto)} <div><span class="pill esp">Nuevo · pendiente de aplicar</span></div></span><span class="r">${eur(p.datos.importe,0)}</span></div>`).join('');
     const ed=D.editable||{};
     const deb=(D.te_deben||[]).map((x,k)=>{ const esp=enEspera(p=>(['cobrado','pago_parcial'].includes(p.tipo)&&p.i===x.i&&p.persona===x.persona)||(p.tipo==='compensar'&&p.persona===x.persona));
-      return `<div class="row"><span>${esc(x.persona)} <span class="small muted">· ${esc(String(x.concepto).split(' (')[0])}</span>
+      return `<div class="row"><span>${esc(x.persona)} <span class="small muted">· ${esc(String(x.concepto).split(' (')[0])}${x.proximo?` · +${eur(x.proximo,2)} este mes`:''}</span>
         <div class="acciones">${esp?`<span class="pill esp">${esp.tipo==='cobrado'?'Pagado':esp.tipo==='compensar'?'Compensado '+eur(esp.importe,2)+' con '+esc(esp.fijo):'Pago de '+eur(esp.cantidad,2)} · pendiente de aplicar</span>`
           :`<button class="mini" data-acc="cobrado" data-k="${k}">Me ha pagado</button><button class="mini sec" data-acc="pago_parcial" data-k="${k}">Pago parcial</button>${(ed.fijos||[]).length?`<button class="mini sec" data-acc="compensar" data-persona="${esc(x.persona)}">Compensar</button>`:''}`}</div></span><span class="r pos">${eur(x.importe,2)}</span></div>`; }).join('')
       +pend.filter(p=>p.datos.tipo==='nuevo_deben').map(p=>`<div class="row"><span>${esc(p.datos.persona)} <div><span class="pill esp">Nuevo · pendiente de aplicar</span></div></span><span class="r pos">${eur(p.datos.importe,2)}</span></div>`).join('');
@@ -618,12 +619,12 @@ select{font:inherit;font-size:16px;color:var(--ink);background:var(--surface);bo
       hoja('Anotar saldo',[{id:'c',label:'Cuenta',tipo:'select',opciones:cuentas,valor:pre},{id:'s',label:'Saldo de hoy (€)',tipo:'num',ph:act!=null?'Ahora: '+eur(act,2):''}],'Guardar',v=>{
         const s=numero(v.s); if(s==null) return 'Escribe el saldo.';
         cambiar({tipo:'saldo',cuenta:v.c,saldo:s},'Saldo de '+v.c+': '+eur(s,2)); }); return; }
-    if(a==='compensar'){ const per=b.dataset.persona, debe=(D.te_deben||[]).filter(x=>x.persona===per).reduce((t,x)=>t+x.importe,0);
+    if(a==='compensar'){ const per=b.dataset.persona, filasP=(D.te_deben||[]).filter(x=>x.persona===per), prox=filasP.reduce((t,x)=>t+(x.proximo||0),0), debe=filasP.reduce((t,x)=>t+x.importe,0)+prox;
       const fijos=(ed.fijos||[]).filter(f=>f.libre>0.005); if(!fijos.length){ aviso('Este mes ya has compensado todos tus gastos fijos.',true); return; }
       const sug=fijos.find(f=>/padre|madre|famil/i.test(f.concepto))||fijos[0], r2=v=>Math.round(v*100)/100;
       const nota=(fj,c)=>{ const f=fijos.find(x=>x.concepto===fj); if(!f||!c) return ''; if(c>debe+0.005) return per+' solo te debe '+eur(debe,2)+'.'; if(c>f.libre+0.005) return 'Como mucho puedes compensar '+eur(f.libre,2)+' de «'+f.concepto+'».';
         return 'Este mes transfieres '+eur(f.libre-c,2)+' en vez de '+eur(f.libre,2)+' a «'+f.concepto+'»'+(c>=debe-0.005?' y '+per+' queda saldado/a.':' y '+per+' aún te deberá '+eur(debe-c,2)+'.'); };
-      hoja('Compensar lo que te debe '+per,[{tipo:'nota',html:'Te debe <b>'+eur(debe,2)+'</b>. Si le pagas algo tú cada mes, le transfieres solo la diferencia y su deuda queda saldada. En tu gasto sigue contando el pago completo.'},
+      hoja('Compensar lo que te debe '+per,[{tipo:'nota',html:'Te debe <b>'+eur(debe-prox,2)+'</b>'+(prox?' y este mes se le cobrarán <b>'+eur(prox,2)+'</b> más (total '+eur(debe,2)+')':'')+'. Si le pagas algo tú cada mes, le transfieres solo la diferencia y su deuda queda saldada. En tu gasto sigue contando el pago completo.'},
         {id:'f',label:'¿Con qué pago tuyo?',tipo:'select',opciones:fijos.map(f=>f.concepto),valor:sug.concepto},
         {id:'i',label:'Importe a compensar (€)',tipo:'num',valor:String(r2(Math.min(debe,sug.libre))).replace('.',',')},{tipo:'nota',html:'<span id="comp-nota"></span>'}],'Compensar',v=>{
         const c=numero(v.i), f=fijos.find(x=>x.concepto===v.f); if(!c||c<=0) return 'Escribe el importe.'; if(c>debe+0.005) return per+' solo te debe '+eur(debe,2)+'.';
