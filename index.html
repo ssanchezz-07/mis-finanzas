@@ -298,6 +298,10 @@ select{font:inherit;font-size:16px;color:var(--ink);background:var(--surface);bo
 .ff-av.aviso{background:var(--warn-soft)} .ff-av.mal{background:var(--bad-soft)}
 .ff-obl{display:grid;gap:2px;padding:10px 12px;border-radius:10px;background:var(--soft)}
 .ff-obl.si{background:var(--info-soft)}
+.ff-ver{display:grid;gap:1px;padding:12px 14px;border-radius:12px;background:var(--soft)}
+.ff-ver b{font-family:var(--display);font-size:30px;font-weight:700;letter-spacing:-.02em}
+.ff-ver.pagar{background:var(--bad-soft)} .ff-ver.pagar b{color:var(--bad)}
+.ff-ver.devolver{background:var(--ok-soft)} .ff-ver.devolver b{color:var(--ok)}
 .ff-k2{gap:14px}
 .ff-k2>div{display:grid;gap:2px}
 .ff-big{font-family:var(--display);font-size:28px;font-weight:700;letter-spacing:-.02em}
@@ -830,13 +834,16 @@ select{font:inherit;font-size:16px;color:var(--ink);background:var(--surface);bo
       const noms=(d.nominas||[]).map(n=>`<div class="row"><span>${esc(fecha(n.fecha))} · <span class="muted">${esc(mesTxt(n.mes))}</span></span><span class="r">${eur(n.neto,2)}</span></div>`).join('');
       return `<section style="padding-top:12px">${sel}
         <div class="card">
-          <div class="kpis ff-k2"><div><span class="small muted">Impuesto estimado</span><span class="ff-big num">${eur(a.cuota,0)}</span></div><div><span class="small muted">Tipo medio</span><span class="ff-mid num">${pct(a.tipo_medio,1)}</span></div></div>
+          ${a.resultado?`<div class="ff-ver ${a.resultado.tipo}"><span class="small">${a.resultado.tipo==='pagar'?'Te saldría a pagar':a.resultado.tipo==='devolver'?'Hacienda te devolvería':'Te saldría a cero'}</span><b class="num">${a.resultado.tipo==='cero'?'0 €':eur(a.resultado.importe,0)}</b><span class="small muted">Impuesto ${eur(a.cuota,0)} − retenido ${eur(en.retenciones_trabajo||0,0)}${a.resultado.retenciones_estimadas?' · retenciones estimadas':''}</span></div>`:''}
+          ${a.hacienda!=null?`<div class="ff-av">Lo que te dijo Hacienda: <b>${a.hacienda<0?'te devolvió '+eur(-a.hacienda,0):a.hacienda>0?'pagaste '+eur(a.hacienda,0):'cero'}</b>.</div>`:''}
+          ${a.resultado&&a.resultado.retenciones_estimadas?aviso('Desde el banco solo se ve tu sueldo neto: la retención de cada empresa está estimada con el algoritmo de la AEAT. Escribe la real (nómina o certificado) en el programa del ordenador para que el resultado sea exacto.','aviso'):''}
+          <div class="kpis ff-k2"><div><span class="small muted">Impuesto del año</span><span class="ff-mid num">${eur(a.cuota,0)}</span></div><div><span class="small muted">Tipo medio</span><span class="ff-mid num">${pct(a.tipo_medio,1)}</span></div></div>
           ${ob?`<div class="ff-obl ${ob.obligado?'si':''}"><b>${ob.obligado?'Obligado a presentar la Renta':'No estás obligado a declarar'}</b><span class="small muted">${esc(ob.motivo)}</span></div>`:''}
-          ${a.por_inversion?`<div class="ff-av mal">Por tus inversiones, unos ${eur(a.por_inversion,0)} más a pagar.</div>`:''}
           ${en.pagadores>1?aviso('Con dos empresas, cada una retiene como si fuera la única: lo normal es que te hayan retenido menos y salga a pagar. Compruébalo con tus dos certificados de retenciones.','aviso'):''}
           ${bruto?`<div class="ff-barra"><span class="a" style="width:${w(neto)}%"></span><span class="b" style="width:${w(a.ss)}%"></span><span class="c" style="width:${w(a.cuota)}%"></span></div>
           <div class="ff-ley"><span><i class="ka"></i>Para ti ${eur(neto,0)}</span><span><i class="kb"></i>Seg. Social ${eur(a.ss,0)}</span><span><i class="kc"></i>IRPF ${eur(a.cuota,0)}</span></div>`:''}
-          <p class="small muted" style="margin:0">${bruto?`Sueldo bruto estimado ${eur(bruto,0)} a partir de ${eur(d.nomina_neta_anual,0)} netos. `:''}${esc(d.nomina_metodo||'')}</p>
+          ${(a.empresas||[]).length?`<div>${a.empresas.map((x,k)=>`<div class="row"><span>${a.empresas.length>1?(k?'Segunda empresa':'Primera empresa'):'Tu empresa'} <span class="small muted">· ${x.contrato} · ${x.fuente==='tuyo'?'tus datos':'estimado'}</span></span><span class="r small">${eur(x.bruto,0)} bruto · ${eur(x.retencion,0)} IRPF</span></div>`).join('')}</div>`:''}
+          <p class="small muted" style="margin:0">${esc(d.nomina_metodo||'')}</p>
         </div></section>
         ${noms?`<section><h2>Tus nóminas de ${esc(st.anio)}</h2><div class="card"><p class="small muted" style="margin:0">${d.nomina_pagos} cobros, ${eur(d.nomina_neta,0)} netos. Cada una cuenta en el año del mes que paga.</p>${noms}</div></section>`:''}
         <section><h2>Inversiones</h2><div class="card">
