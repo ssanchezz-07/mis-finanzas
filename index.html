@@ -101,8 +101,7 @@ section{padding-block:18px 0;display:grid;gap:12px}
 .pos-f .n{font-weight:600;font-size:14.5px;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .pos-f .s{font-size:12.5px;color:var(--muted)}
 .pos-f .s.pos,.pos-f .s .pos{color:var(--ok)} .pos-f .s.neg,.pos-f .s .neg{color:var(--bad)}
-.alert{display:grid;grid-template-columns:4px minmax(0,1fr);gap:10px;font-size:13.5px}
-.alert::before{content:"";border-radius:4px;background:var(--warn)}
+.alert{background:var(--warn-soft);border-radius:10px;padding:8px 11px;font-size:13.5px}
 .grafica{width:100%;height:auto;display:block}
 .g-grid{stroke:var(--line)} .g-eje{fill:var(--muted);font-size:10px;font-family:var(--body)}
 /* pestañas */
@@ -249,6 +248,60 @@ select{font:inherit;font-size:16px;color:var(--ink);background:var(--surface);bo
 .ia-fila{display:grid;grid-template-columns:minmax(0,1fr) repeat(3,auto);gap:4px 14px;padding:7px 0;border-top:1px solid var(--line);font-size:13.5px}
 .ia-fila:first-child{border-top:0}
 .ia-cab span{font-size:10.5px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+/* movimientos */
+.mv-filtros{display:grid;grid-template-columns:minmax(0,1fr) 120px;gap:8px}
+.mv-filtros input,.mv-filtros select{font:inherit;font-size:16px;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:9px 10px;min-width:0}
+.mv-lista{display:grid}
+.mv-dia{font-size:12.5px;font-weight:600;color:var(--muted);padding:12px 0 4px}
+.mv-dia:first-child{padding-top:0}
+.mv{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:8px 0;border-top:1px solid var(--line)}
+.mv-dia+.mv{border-top:0}
+.mv-t{display:grid;min-width:0}
+.mv-c{font-size:14.5px;font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.mv-i{white-space:nowrap;font-weight:600}
+/* Futuro y Fiscal */
+.cx-tabs{max-width:100%;overflow-x:auto;scrollbar-width:none}
+.cx-tabs::-webkit-scrollbar{display:none}
+.cx-tabs button{white-space:nowrap;padding:7px 13px}
+.ff-cab{display:flex;justify-content:space-between;align-items:baseline;gap:8px;flex-wrap:wrap}
+.ff-tit{margin:2px 0 0;display:flex;align-items:baseline;gap:8px;flex-wrap:wrap}
+.ff-tit b{font-family:var(--display);font-size:30px;font-weight:700;letter-spacing:-.02em}
+.ff-plz{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));align-items:center;justify-self:stretch;overflow:visible}
+.ff-plz button{padding:7px 2px;font-size:13px}
+.ff-otro{display:inline-flex;align-items:center;justify-content:center;padding:0 4px;border-radius:999px;font-size:13.5px;font-weight:600;color:var(--muted)}
+.ff-otro input{width:26px;border:0;background:transparent;font:inherit;font-size:16px;color:var(--ink);text-align:center;padding:6px 0}
+.ff-otro input:placeholder-shown{width:40px;font-size:13px;font-weight:600}
+.ff-otro input::placeholder{color:var(--muted)}
+.ff-otro input:placeholder-shown:not(:focus)+span{display:none}
+.ff-otro input:focus{outline:0}
+.ff-otro[aria-selected="true"],.ff-otro:focus-within{background:var(--surface);color:var(--ink);box-shadow:0 1px 3px rgba(0,0,0,.12)}
+.ff-chk{display:flex;align-items:center;gap:8px;font-size:14px}
+.ff-chk input{width:18px;height:18px}
+.ff-lect{min-height:40px;display:grid;align-content:start;gap:1px}
+.ff-lect b{font-size:17px}
+.ff-hoy{stroke:var(--muted);stroke-dasharray:2 4}
+.ff-b80{fill:var(--accent);opacity:.13} .ff-b50{fill:var(--accent);opacity:.2}
+.ff-hist{fill:none;stroke:var(--ink);stroke-width:2} .ff-med{fill:none;stroke:var(--accent);stroke-width:2.4}
+.ff-cruz{stroke:var(--ink);stroke-dasharray:3 3;opacity:.5} .ff-pt{fill:var(--surface);stroke:var(--accent);stroke-width:2.4}
+.ff-ley{display:flex;flex-wrap:wrap;gap:4px 14px;font-size:12.5px;color:var(--muted)}
+.ff-ley span{display:inline-flex;align-items:center;gap:6px}
+.ff-ley i{display:inline-block;width:14px;height:8px;border-radius:3px}
+.ff-ley i.h{background:var(--ink);height:3px} .ff-ley i.m{background:var(--accent);height:3px} .ff-ley i.b{background:var(--accent);opacity:.25}
+.ff-ley i.ka,.ff-barra .a{background:var(--ok)} .ff-ley i.kb,.ff-barra .b{background:var(--c1)} .ff-ley i.kc,.ff-barra .c{background:var(--c2)}
+.ff-barra{display:flex;height:12px;border-radius:99px;overflow:hidden;background:var(--soft)}
+.ff-barra span{display:block;height:100%}
+.ff-obj{display:grid;gap:2px;padding:10px 0;border-top:1px solid var(--line)}
+.ff-obj:first-child{border-top:0;padding-top:0}
+.ff-obj-t{display:flex;justify-content:space-between;gap:8px;align-items:center}
+.ff-e{font-weight:600;font-size:14px} .ff-e.ok{color:var(--ok)} .ff-e.mal{color:var(--bad)}
+.ff-av{background:var(--soft);border-radius:10px;padding:8px 11px;font-size:13.5px}
+.ff-av.aviso{background:var(--warn-soft)} .ff-av.mal{background:var(--bad-soft)}
+.ff-obl{display:grid;gap:2px;padding:10px 12px;border-radius:10px;background:var(--soft)}
+.ff-obl.si{background:var(--info-soft)}
+.ff-k2{gap:14px}
+.ff-k2>div{display:grid;gap:2px}
+.ff-big{font-family:var(--display);font-size:28px;font-weight:700;letter-spacing:-.02em}
+.ff-mid{font-family:var(--display);font-size:20px;font-weight:650}
 </style>
 </head>
 <body>
@@ -365,6 +418,8 @@ select{font:inherit;font-size:16px;color:var(--ink);background:var(--surface);bo
     document.querySelectorAll('#tabs button').forEach(b=>b.setAttribute('aria-current',b.dataset.t===pestana?'page':'false'));
     app.innerHTML=`<div class="estado" id="estado"></div>`+vEspera()+({inicio:vInicio,cartera:vCartera,objetivos:vObjetivos,planificar:vPlanificar,cuentas:vCuentas}[pestana])();
     estado();
+    if(pestana==='planificar'&&subPlan==='futuro') FF.bind();
+    if(pestana==='cuentas') MOV.bind();
     if(pestana==='planificar'&&subPlan==='calc'){ const r=$('#sim-m'); if(r) CALC.bind(r,D,(el,spec)=>{ el.innerHTML=GX.crear('m-amort',Object.assign({tipo:'linea',alto:170,sinRangos:true,ultimoEsHoy:false,sinDelta:true,etiqueta:ym=>ym.slice(0,4)},spec)); }); }
   }
 
@@ -656,7 +711,7 @@ select{font:inherit;font-size:16px;color:var(--ink);background:var(--surface);bo
     return `<div class="hero"><span class="eyebrow">Patrimonio neto</span><div class="big num">${eur(neto,0)}</div>${chip}
       <div class="split num"><span>Invertido <b>${eur(valorCartera(),0)}</b></span><span>Liquidez <b>${eur(p.liquidez,0)}</b></span>${p.deudas?`<span>Deudas <b class="neg">${eur(-p.deudas,0)}</b></span>`:''}</div>
       </div>
-      <section><div class="card">${GX.crear('m-pat',{tipo:'linea',pista:true,alto:170,etiquetas:evol.map(e=>e.mes),ocultas:['Inversiones','Liquidez'],series:[
+      <section><div class="card">${GX.crear('m-pat',{tipo:'linea',pista:true,alto:170,etiquetas:evol.map(e=>e.mes),ocultas:['Inversiones','Liquidez','Deudas'],series:[
         {nombre:'Patrimonio',color:'var(--c1)',area:true,valores:evol.map((e,i)=>i===evol.length-1?neto:e.neto)},
         {nombre:'Inversiones',color:'var(--c3)',valores:evol.map((e,i)=>i===evol.length-1?valorCartera():e.cartera)},
         {nombre:'Liquidez',color:'var(--c4)',valores:evol.map(e=>e.liquidez)},
@@ -676,9 +731,133 @@ select{font:inherit;font-size:16px;color:var(--ink);background:var(--surface);bo
       <button data-acc="gasto">Gasto en efectivo<span>Apúntalo al momento</span></button>
       <button data-acc="saldo">Anotar un saldo<span>Trust Wallet, bancos…</span></button></div></section>`;
   }
+  // ================= FUTURO Y FISCAL (los calcula el programa del ordenador y llegan cifrados) =================
+  const FF=(()=>{
+    const st={hor:+(ls.get('mf_m_hor')||5), real:ls.get('mf_m_real')==='1', anio:null};
+    const plazo=a=>a+(a===1?' año':' años');
+    const corto=v=>{ const a=Math.abs(v); return (v<0?'−':'')+(a>=10000?grupo(String(Math.round(a/1000)))+' mil':grupo(String(Math.round(a))))+' €'; };
+    const sumaMeses=k=>{ const d=new Date(); d.setDate(1); d.setMonth(d.getMonth()+k); return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0'); };
+    const plazoM=m=>m<12?m+(m===1?' mes':' meses'):(()=>{ const a=Math.floor(m/12), r=m%12; return plazo(a)+(r?' y '+r+(r===1?' mes':' meses'):''); })();
+    const aviso=(t,n)=>`<div class="ff-av ${n||''}">${esc(t)}</div>`;
+    const sinDatos=q=>`<div class="card"><p class="muted" style="margin:0">${q} Abre el programa en tu ordenador: lo calcula y lo envía aquí cifrado.</p></div>`;
+    function tray(F,H){ const infl=F.supuestos.inflacion, def=k=>st.real?Math.pow(1+infl,k/12):1, o={};
+      ['10','25','50','75','90'].forEach(p=>o[p]=F.trayectoria[p].slice(0,H+1).map((v,k)=>v/def(k))); return o; }
+
+    function vFuturo(){
+      const F=D.futuro; if(!F) return sinDatos('Aún no hay previsión.');
+      const maxA=Math.floor((F.trayectoria['50'].length-1)/12); st.hor=Math.max(1,Math.min(maxA,st.hor));
+      const H=st.hor*12, P=tray(F,H), TT=tray(F,maxA*12), q=F.calidad;
+      const bot=[1,3,5,10].map(a=>`<button type="button" data-fh="${a}" aria-selected="${st.hor===a}">${a===1?'1 año':a+' años'}</button>`).join('');
+      const propio=![1,3,5,10].includes(st.hor);
+      const filas=[1,3,5,10,20,30].concat(propio?[st.hor]:[]).filter((a,i,arr)=>a<=maxA&&arr.indexOf(a)===i).sort((a,b)=>a-b).map(a=>{ const k=a*12;
+        return `<tr><td>${plazo(a)}</td><td>${eur(TT['10'][k],0)}</td><td><b>${eur(TT['50'][k],0)}</b></td><td>${eur(TT['90'][k],0)}</td></tr>`; }).join('');
+      const objs=(F.objetivos||[]).map(o=>{ let e, t='ok', r='';
+        if(o.ya_conseguido) e='Ya lo has conseguido';
+        else if(o.mes_mediano==null){ e='No llegas en 30 años con este ritmo'; t='mal'; }
+        else { e='Lo más probable: '+mesTxt(sumaMeses(o.mes_mediano)); if(o.mes_optimista!==o.mes_prudente) r='entre '+mesTxt(sumaMeses(o.mes_optimista),true)+' y '+(o.mes_prudente==null?'más de 30 años':mesTxt(sumaMeses(o.mes_prudente),true)); }
+        const p=!o.ya_conseguido&&o.prob_antes_de_la_fecha!=null?`<span class="pill ${o.prob_antes_de_la_fecha>=.8?'ok':o.prob_antes_de_la_fecha>=.4?'aviso':'mal'}">${pct(o.prob_antes_de_la_fecha,0)} a tiempo</span>`:'';
+        return `<div class="ff-obj"><div class="ff-obj-t"><b>${esc(o.nombre)}</b>${p}</div><span class="ff-e ${t}">${esc(e)}</span>${r?`<span class="small muted">${esc(r)}</span>`:''}</div>`; }).join('');
+      const s=F.supuestos, ine=F.ine;
+      return `<section style="padding-top:12px"><div class="card">
+          <div class="ff-cab"><h2>Tu patrimonio dentro de ${plazo(st.hor)}</h2><span class="pill ${q.nivel==='buena'?'ok':q.nivel==='media'?'aviso':'mal'}">Fiabilidad ${esc(q.nivel)}</span></div>
+          <p class="ff-tit"><b class="num">${eur(P['50'][H],0)}</b> <span class="muted small">lo más probable</span></p>
+          <p class="small muted" style="margin:0">En 8 de cada 10 casos, entre <b class="num">${eur(P['10'][H],0)}</b> y <b class="num">${eur(P['90'][H],0)}</b>${st.real?' (en euros de hoy)':''}.</p>
+          <div class="cx-tabs ff-plz" role="tablist">${bot}<label class="ff-otro" aria-selected="${propio}"><input id="ff-anios" inputmode="numeric" maxlength="2" placeholder="Otro" value="${propio?st.hor:''}" aria-label="Otro plazo en años, de 1 a ${maxA}"><span> años</span></label></div>
+          <label class="ff-chk"><input type="checkbox" id="ff-real" ${st.real?'checked':''}> En euros de hoy</label>
+          <div class="ff-lect" id="ff-lect"><span class="small muted">Desliza el dedo por la gráfica para ver cada mes</span></div>
+          <div id="ff-svg" style="min-height:230px"></div>
+          <div class="ff-ley"><span><i class="h"></i>Tu historial</span><span><i class="m"></i>Lo más probable</span><span><i class="b"></i>80 % de los casos</span></div>
+        </div></section>
+        <section><h2>Resumen por plazos</h2><div class="card"><table class="tbl"><thead><tr><th>Dentro de</th><th>Prudente</th><th>Probable</th><th>Optimista</th></tr></thead><tbody>${filas}</tbody></table>
+          <p class="small muted" style="margin:0">«Prudente» y «Optimista» dejan fuera el 10 % de casos más extremos por cada lado.</p></div></section>
+        ${objs?`<section><h2>Cuándo llegas a tus objetivos</h2><div class="card">${objs}</div></section>`:''}
+        <section><h2>Qué cuenta esta previsión</h2><div class="card">
+          <div class="row"><span>Ahorro mensual típico</span><span class="r">${eur(s.ahorro_mensual_mediana,0)}</span></div>
+          <div class="row"><span>Pasas a inversión al mes</span><span class="r">${eur(s.aportacion_inversion,0)}</span></div>
+          <div class="row"><span>Rentabilidad esperada</span><span class="r">${pct(s.rentabilidad,1)}</span></div>
+          <div class="row"><span>Inflación</span><span class="r">${pct(s.inflacion,1)}</span></div>
+          ${ine?`<p class="small muted" style="margin:0">Inflación oficial del INE: media del IPC de los últimos ${ine.meses} meses (último dato ${String(ine.ultimo).replace('.',',')} % en ${esc(mesTxt(ine.mes))}).</p>`:''}
+          <p class="small muted" style="margin:0">Ahorro: ${esc(s.fuente_ahorro)}. Los «¿Y si…?» se hacen en el programa del ordenador.</p>
+          ${(F.avisos||[]).map(a=>aviso(a,'aviso')).join('')}</div></section>
+        <p class="small muted" style="margin:14px 0 0">Estimación con tu historial y supuestos de mercado. No es una predicción exacta ni asesoramiento financiero.</p>`;
+    }
+
+    function dibujar(){
+      const el=$('#ff-svg'), F=D.futuro; if(!el||!F) return;
+      const H=st.hor*12, P=tray(F,H), ev=(D.evolucion||[]).filter(e=>e.neto!=null);
+      const nh=Math.min(ev.length,Math.max(6,Math.round(H*0.4))), hist=ev.slice(ev.length-nh).map(e=>e.neto), m0=-(hist.length-1);
+      const W=Math.max(280,Math.round(el.clientWidth||340)), Hh=230, R=8, T=10, B=22;
+      const todos=hist.concat(P['10'],P['90']); let mn=Math.min(...todos), mx=Math.max(...todos); const pad=(mx-mn)*.06||1; mn=mn>=0?0:mn-pad; mx+=pad;
+      const x=m=>L+(m-m0)/(H-m0||1)*(W-L-R), y=v=>T+(1-(v-mn)/(mx-mn||1))*(Hh-T-B);
+      const lin=(a,d)=>a.map((v,i)=>(i?'L':'M')+x(d+i).toFixed(1)+','+y(v).toFixed(1)).join(' ');
+      const banda=(hi,lo)=>'M'+hi.map((v,k)=>x(k).toFixed(1)+','+y(v).toFixed(1)).join(' L')+' L'+lo.map((v,k)=>[x(k),y(v)]).reverse().map(p=>p[0].toFixed(1)+','+p[1].toFixed(1)).join(' L')+' Z';
+      const tk=(()=>{ const p0=(mx-mn)/3, g=Math.pow(10,Math.floor(Math.log10(p0))), r=p0/g, p=(r<=1?1:r<=2?2:r<=2.5?2.5:r<=5?5:10)*g, o=[];
+        for(let v=Math.floor(mn/p)*p;;v+=p){ o.push(+v.toFixed(6)); if(v>=mx-p*1e-9||o.length>12) break; } return o; })();
+      mn=Math.min(mn,tk[0]); mx=Math.max(mx,tk[tk.length-1]);
+      const L=Math.max(...tk.map(v=>corto(v).length))*6.3+10;
+      let rej=''; for(const v of tk){ rej+=`<line x1="${L}" x2="${W-R}" y1="${y(v)}" y2="${y(v)}" class="gx-grid"/><text x="${L-6}" y="${y(v)+4}" class="gx-eje" text-anchor="end">${corto(v)}</text>`; }
+      const fin=sumaMeses(H);
+      el.innerHTML=`<svg class="gx-svg" viewBox="0 0 ${W} ${Hh}" width="${W}" height="${Hh}" role="img" aria-label="Previsión a ${plazo(st.hor)}: lo más probable ${eur(P['50'][H],0)}">${rej}
+        <text x="${x(0)}" y="${Hh-6}" class="gx-eje" text-anchor="middle">hoy</text><text x="${W-R}" y="${Hh-6}" class="gx-eje" text-anchor="end">${esc(mesTxt(fin,true))}</text>
+        <line x1="${x(0)}" x2="${x(0)}" y1="${T}" y2="${Hh-B}" class="ff-hoy"/>
+        <path d="${banda(P['90'],P['10'])}" class="ff-b80"/><path d="${banda(P['75'],P['25'])}" class="ff-b50"/>
+        <path d="${lin(hist,m0)}" class="ff-hist"/><path d="${lin(P['50'],0)}" class="ff-med"/>
+        <line class="ff-cruz" y1="${T}" y2="${Hh-B}" style="display:none"/><circle class="ff-pt" r="5" style="display:none"/></svg>`;
+      const svg=el.querySelector('svg'), cz=svg.querySelector('.ff-cruz'), pt=svg.querySelector('.ff-pt'), lect=$('#ff-lect');
+      const ver=cx=>{ const r=svg.getBoundingClientRect(), px=(cx-r.left)*W/r.width, m=Math.max(m0,Math.min(H,Math.round(m0+(px-L)/(W-L-R)*(H-m0))));
+        const v=m<=0?hist[hist.length-1+m]:P['50'][m]; cz.setAttribute('x1',x(m)); cz.setAttribute('x2',x(m)); cz.style.display=''; pt.setAttribute('cx',x(m)); pt.setAttribute('cy',y(v)); pt.style.display='';
+        lect.innerHTML=m<=0?`<span class="small muted">${m===0?'Hoy':esc(mesTxt(ev[ev.length-1+m].mes))} · dato real</span><b class="num">${eur(v,0)}</b>`
+          :`<span class="small muted">${esc(mesTxt(sumaMeses(m)))} · dentro de ${plazoM(m)}</span><b class="num">${eur(v,0)}</b><span class="small muted">entre ${eur(P['10'][m],0)} y ${eur(P['90'][m],0)}</span>`; };
+      svg.addEventListener('pointerdown',e=>ver(e.clientX)); svg.addEventListener('pointermove',e=>ver(e.clientX));
+    }
+
+    function bind(){
+      if(!$('#ff-svg')) return; dibujar();
+      document.querySelectorAll('[data-fh]').forEach(b=>b.onclick=()=>{ st.hor=+b.dataset.fh; ls.set('mf_m_hor',st.hor); pintar(); });
+      const i=$('#ff-anios'), ok=()=>{ const a=parseInt(i.value,10); if(a>=1&&a<=30){ st.hor=a; ls.set('mf_m_hor',a); pintar(); } };
+      i.addEventListener('change',ok); i.addEventListener('keydown',e=>{ if(e.key==='Enter'){ e.preventDefault(); i.blur(); ok(); } });
+      $('#ff-real').onchange=e=>{ st.real=e.target.checked; ls.set('mf_m_real',st.real?'1':'0'); pintar(); };
+    }
+
+    function vFiscal(){
+      const X=D.fiscal; if(!X||!X.anios||!X.anios.length) return sinDatos('Aún no hay datos fiscales.');
+      if(!st.anio||!X.anios.some(a=>a.anio===st.anio)) st.anio=X.anios[0].anio;
+      const a=X.anios.find(z=>z.anio===st.anio), d=a.datos, en=a.entrada, ob=a.obligacion, bruto=en.bruto_anual||0;
+      const sel=`<div class="cx-tabs" role="tablist">${X.anios.map(z=>`<button type="button" data-fa="${z.anio}" aria-selected="${z.anio===st.anio}">${z.anio}</button>`).join('')}</div>`;
+      const neto=Math.max(0,bruto-a.ss-a.cuota), w=v=>bruto>0?(Math.max(0,v)/bruto*100).toFixed(2):0;
+      const est=X.estado||{};
+      const pasos=a.pasos.map(p=>`<tr class="${/^(Rendimiento neto|Base liquidable general|Cuota líquida)/.test(p.concepto)?'t':''}"><td>${esc(p.concepto)}</td><td>${eur(p.importe,0)}</td></tr>`).join('');
+      const noms=(d.nominas||[]).map(n=>`<div class="row"><span>${esc(fecha(n.fecha))} · <span class="muted">${esc(mesTxt(n.mes))}</span></span><span class="r">${eur(n.neto,2)}</span></div>`).join('');
+      return `<section style="padding-top:12px">${sel}
+        <div class="card">
+          <div class="kpis ff-k2"><div><span class="small muted">Impuesto estimado</span><span class="ff-big num">${eur(a.cuota,0)}</span></div><div><span class="small muted">Tipo medio</span><span class="ff-mid num">${pct(a.tipo_medio,1)}</span></div></div>
+          ${ob?`<div class="ff-obl ${ob.obligado?'si':''}"><b>${ob.obligado?'Obligado a presentar la Renta':'No estás obligado a declarar'}</b><span class="small muted">${esc(ob.motivo)}</span></div>`:''}
+          ${a.por_inversion?`<div class="ff-av mal">Por tus inversiones, unos ${eur(a.por_inversion,0)} más a pagar.</div>`:''}
+          ${en.pagadores>1?aviso('Con dos empresas, cada una retiene como si fuera la única: lo normal es que te hayan retenido menos y salga a pagar. Compruébalo con tus dos certificados de retenciones.','aviso'):''}
+          ${bruto?`<div class="ff-barra"><span class="a" style="width:${w(neto)}%"></span><span class="b" style="width:${w(a.ss)}%"></span><span class="c" style="width:${w(a.cuota)}%"></span></div>
+          <div class="ff-ley"><span><i class="ka"></i>Para ti ${eur(neto,0)}</span><span><i class="kb"></i>Seg. Social ${eur(a.ss,0)}</span><span><i class="kc"></i>IRPF ${eur(a.cuota,0)}</span></div>`:''}
+          <p class="small muted" style="margin:0">${bruto?`Sueldo bruto estimado ${eur(bruto,0)} a partir de ${eur(d.nomina_neta_anual,0)} netos. `:''}${esc(d.nomina_metodo||'')}</p>
+        </div></section>
+        ${noms?`<section><h2>Tus nóminas de ${esc(st.anio)}</h2><div class="card"><p class="small muted" style="margin:0">${d.nomina_pagos} cobros, ${eur(d.nomina_neta,0)} netos. Cada una cuenta en el año del mes que paga.</p>${noms}</div></section>`:''}
+        <section><h2>Inversiones</h2><div class="card">
+          <div class="row"><span>Ganancias por ventas</span><span class="r pos">${eur(d.ganancias,0)}</span></div>
+          <div class="row"><span>Pérdidas por ventas</span><span class="r neg">${eur(d.perdidas,0)}</span></div>
+          ${d.perdidas_diferidas_2m>0?`<div class="row"><span>Bloqueadas (regla de 2 meses)</span><span class="r">${eur(d.perdidas_diferidas_2m,0)}</span></div>`:''}
+          <div class="row"><span>Dividendos</span><span class="r">${eur(d.dividendos,0)}</span></div>
+          <div class="row"><span>Intereses</span><span class="r">${eur(d.intereses,0)}</span></div>
+          <div class="row"><span>Retenido</span><span class="r">${eur((d.retencion_dividendos||0)+(d.retencion_intereses||0),0)}</span></div></div></section>
+        <section><h2>Cómo se calcula</h2><div class="card"><table class="tbl"><tbody>${pasos}</tbody></table></div></section>
+        <p class="small muted" style="margin:14px 0 0"><span class="pill ${est.nivel==='ok'?'ok':est.nivel==='revisar'?'aviso':'mal'}">${est.nivel==='ok'?'Normativa al día':'Revisar normativa'}</span> ${esc(est.texto||'')} Cálculo orientativo; tus datos personales (edad, alquiler…) se cambian en el programa del ordenador.</p>`;
+    }
+    document.addEventListener('click',e=>{ const b=e.target.closest('[data-fa]'); if(b){ st.anio=b.dataset.fa; pintar(); } });
+    return {vFuturo,vFiscal,bind};
+  })();
+
   let subPlan='analisis';
   function vPlanificar(){
-    const seg=`<div class="cx-tabs" role="tablist" style="margin-top:12px">${[['analisis','Análisis'],['calc','¿Me lo puedo permitir?']].map(([k,t])=>`<button type="button" data-sub="${k}" aria-selected="${subPlan===k}">${t}</button>`).join('')}</div>`;
+    const seg=`<div class="cx-tabs" role="tablist" style="margin-top:12px">${[['analisis','Análisis'],['futuro','Futuro'],['fiscal','Fiscal'],['calc','¿Me lo permito?']].map(([k,t])=>`<button type="button" data-sub="${k}" aria-selected="${subPlan===k}">${t}</button>`).join('')}</div>`;
+    if(subPlan==='futuro') return `<h1>Planificar</h1>${seg}`+FF.vFuturo();
+    if(subPlan==='fiscal') return `<h1>Planificar</h1>${seg}`+FF.vFiscal();
     if(subPlan==='calc') return `<h1>Planificar</h1>${seg}<section style="padding-top:12px"><div class="card" id="sim-m">${CALC.render(D)}</div></section>`;
     const est=IA.estacion(D), desde=IA.desde(D);
     return `<h1>Planificar</h1>${seg}
@@ -725,6 +904,23 @@ select{font:inherit;font-size:16px;color:var(--ink);background:var(--surface);bo
         <tr><td>Ingreso</td><td>${eur(n.ingreso,0)}</td><td>${eur(n.real.ingreso??n.ingreso,0)}</td></tr>${fn('− Fijos',n.plan.fijos,n.real.fijos,true)}${fn('− Resto del gasto',n.plan.resto,n.real.resto,true)}${fn('− Inversión',n.plan.inversion,n.real.inversion,false)}
         <tr class="t"><td>= Te sobra</td><td>${eur(n.plan.ahorro,0)}</td><td class="${n.real.ahorro<0?'neg':'pos'}">${eur(n.real.ahorro,0)}</td></tr></tbody></table><span class="small muted">Real = media de los 3 últimos meses completos.</span></div></section>`;
   }
+  // ---------- últimos movimientos (solo lectura; se recategorizan en el programa del ordenador)
+  const MOV=(()=>{
+    const st={q:'',cat:'',n:40};
+    const fila=m=>`<div class="mv"><div class="mv-t"><span class="mv-c">${esc(m.concepto)}</span><span class="small muted">${esc(m.categoria||'Sin categoría')}${m.fijo?' · fijo':''}</span></div><span class="mv-i num ${m.importe<0?'pos':''}">${m.importe<0?'+'+eur(-m.importe,2):eur(-m.importe,2)}</span></div>`;
+    function lista(){ const M=(D.movimientos||[]).filter(m=>(!st.q||String(m.concepto).toLowerCase().includes(st.q))&&(!st.cat||m.categoria===st.cat));
+      if(!M.length) return '<p class="small muted" style="margin:0">No hay movimientos con ese filtro.</p>';
+      let out='', dia=null; M.slice(0,st.n).forEach(m=>{ if(m.fecha!==dia){ dia=m.fecha; out+=`<div class="mv-dia">${esc(fecha(m.fecha))}</div>`; } out+=fila(m); });
+      return out+(M.length>st.n?`<button class="mini sec" id="mv-mas" style="justify-self:center">Ver más (${M.length-st.n} restantes)</button>`:''); }
+    function seccion(){ const M=D.movimientos||[]; if(!M.length) return '';
+      const cats=[...new Set(M.map(m=>m.categoria).filter(Boolean))].sort((a,b)=>a.localeCompare(b,'es'));
+      return `<section><h2>Últimos movimientos</h2><div class="card">
+        <div class="mv-filtros"><input id="mv-q" type="search" placeholder="Buscar comercio o concepto" value="${esc(st.q)}" autocomplete="off"><select id="mv-cat" aria-label="Categoría"><option value="">Todas</option>${cats.map(c=>`<option ${c===st.cat?'selected':''}>${esc(c)}</option>`).join('')}</select></div>
+        <div id="mv-lista" class="mv-lista">${lista()}</div><p class="small muted" style="margin:0">Gastos e ingresos de tus bancos. Para cambiar una categoría, usa el programa del ordenador.</p></div></section>`; }
+    function bind(){ const q=$('#mv-q'); if(!q) return; const re=()=>{ $('#mv-lista').innerHTML=lista(); const b=$('#mv-mas'); if(b) b.onclick=()=>{ st.n+=40; re(); }; };
+      q.addEventListener('input',()=>{ st.q=q.value.trim().toLowerCase(); st.n=40; re(); }); $('#mv-cat').onchange=e=>{ st.cat=e.target.value; st.n=40; re(); }; re(); }
+    return {seccion,bind};
+  })();
   function vCuentas(){
     const editables=(D.editable&&D.editable.cuentas)||[];
     const cu=D.cuentas.map(x=>{ let s=x.saldo; if(x.nombre.startsWith('Trade Republic · cartera')) s=valorCartera();
@@ -745,6 +941,7 @@ select{font:inherit;font-size:16px;color:var(--ink);background:var(--surface);bo
     const deu=(D.deudas||[]).map(x=>`<div class="row"><span>${esc(x.nombre)} <span class="small muted">· ${x.restantes} cuotas</span></span><span class="r neg">${eur(x.pendiente,2)}</span></div>`).join('');
     return `<h1>Cuentas</h1>
       <section style="padding-top:12px"><h2>Dónde está tu dinero</h2><div class="card">${cu}<div class="row"><b>Patrimonio neto</b><b class="r">${eur(netoVivo())}</b></div></div></section>
+      ${MOV.seccion()}
       <section><div class="sec-top"><h2>Te deben</h2><button class="mini" data-acc="nuevo_deben">+ Añadir</button></div><div class="card">${deb||'<span class="muted small">Nadie te debe nada.</span>'}
         ${(ed.compensaciones||[]).map((c,k)=>{ const esp=enEspera(p=>p.tipo==='borrar_compensacion'&&p.fecha===c.fecha&&p.fijo===c.fijo&&p.persona===c.persona);
           return `<div class="row"><span>${esc(c.persona)} → ${esc(c.fijo)} <div class="small muted">Compensado el ${fecha(c.fecha)}: ${esc(c.fijo)} te cuesta ${eur(c.importe,2)} menos este mes</div>
