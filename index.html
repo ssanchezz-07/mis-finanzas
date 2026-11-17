@@ -1084,7 +1084,7 @@ select{font:inherit;font-size:16px;color:var(--ink);background:var(--surface);bo
       hoja('¿Deshacer la compensación?',[{tipo:'nota',html:esc(c.persona)+' volverá a deberte '+eur(c.importe,2)+' y «'+esc(c.fijo)+'» vuelve a su importe normal.'}],'Sí, deshacer',()=>{
         cambiar({tipo:'borrar_compensacion',fecha:c.fecha,fijo:c.fijo,persona:c.persona},'Deshacer compensación de '+c.persona); }); return; }
     if(a==='importar'){ const bancos=ed.bancos||[]; if(!bancos.length){ aviso('Abre el programa del ordenador para que envíe tu lista de bancos.',true); return; }
-      hoja('Importar extracto',[{tipo:'nota',html:'Descarga los movimientos en la app de tu banco, guárdalos en <b>Archivos</b> y elígelos aquí. Tu ordenador los importa en cuanto el programa esté abierto.'},
+      hoja('Importar extracto',[{tipo:'nota',html:'Descarga los movimientos en la app de tu banco, guárdalos en <b>Archivos</b> y elígelos aquí. Tu ordenador los importa en unos segundos si el programa está abierto, o en menos de 30 minutos si solo está encendido.'},
         {id:'b',label:'¿De qué banco?',tipo:'select',opciones:bancos,valor:bancos[0]},{id:'f',label:'Archivo(s)',tipo:'archivo'}],'Enviar al ordenador',async v=>{
         const fs=[...(v.f||[])]; if(!fs.length) return 'Elige el archivo del extracto.';
         if(fs.some(f=>!/\.(csv|xlsx|xls|txt)$/i.test(f.name))) return 'Solo se pueden importar archivos CSV o Excel.';
