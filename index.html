@@ -702,6 +702,18 @@ select{font:inherit;font-size:16px;color:var(--ink);background:var(--surface);bo
     return {prevision,avisos,categorias,grupos,estacion,desde:D=>I(D)&&I(D).desde,meses:D=>I(D)&&I(D).meses_fiables};
   })();
 
+  // ---------- «Lo que he hecho por ti»: lo que el programa aprende y cambia solo, con Deshacer
+  function tarjetaCerebro(){
+    const c=D.cerebro; if(!c||c.activo===false) return '';
+    const enviados=new Set(pend.filter(p=>p.datos&&p.datos.tipo==='deshacer_cerebro').map(p=>p.datos.id));
+    const filas=(c.cambios||[]).slice(0,6).map(x=>`<div class="row" style="align-items:flex-start;gap:10px"><span>${esc(x.texto)} <span class="small muted">· ${hace(x.fecha)}</span></span>
+      ${x.deshecho?'<span class="small muted">Deshecho</span>':enviados.has(x.id)?'<span class="small muted">Deshaciendo…</span>':`<button class="btn sec" style="padding:6px 10px;font-size:13px" data-deshacer="${esc(x.id)}">Deshacer</button>`}</div>`).join('');
+    return `<section><h2>Lo que he hecho por ti</h2><div class="card">${filas||'<span class="small muted">Todavía nada. Cuando aprenda algo de tus movimientos o de tus cambios, aparecerá aquí.</span>'}</div></section>`;
+  }
+  document.addEventListener('click',e=>{ const b=e.target.closest('[data-deshacer]'); if(!b||!D) return;
+    const x=((D.cerebro||{}).cambios||[]).find(c=>c.id===b.dataset.deshacer); if(!x) return;
+    cambiar({tipo:'deshacer_cerebro',id:x.id},'Deshacer: '+x.texto); });
+
   // ---------- vistas
   function vInicio(){
     const p=D.patrimonio, m=D.mes, neto=netoVivo(), v=p.variacion_mes!=null?p.variacion_mes+(neto-p.neto):null;
@@ -732,7 +744,8 @@ select{font:inherit;font-size:16px;color:var(--ink);background:var(--surface);bo
       ${evol.length>1?`<section><h2>Gasto de cada mes</h2><div class="card">${GX.crear('m-gasto',{tipo:'barras',alto:160,etiquetas:evol.map(e=>e.mes),
         series:[{nombre:'Gasto',color:'var(--c1)',valores:evol.map(e=>e.gasto||0)}],referencia:m.presupuesto?{valor:m.presupuesto,nombre:'Presupuesto'}:null,
         colorBarra:(v,i)=>i===evol.length-1?'var(--c1)':(m.presupuesto&&v>m.presupuesto?'var(--c8)':'var(--c3)')})}</div></section>`:''}
-      ${avisos?`<section><h2>Avisos</h2><div class="card">${avisos}</div></section>`:''}`;
+      ${avisos?`<section><h2>Avisos</h2><div class="card">${avisos}</div></section>`:''}
+      ${tarjetaCerebro()}`;
   }
   function vRapidas(){
     return `<section><div class="rapidas"><button data-acc="importar" class="ancha"><span class="ico"><svg viewBox="0 0 24 24"><path d="M12 4v11m0 0l-4-4m4 4l4-4"/><path d="M5 19h14"/></svg></span><b>Importar extracto<span>CSV o Excel de tu banco o bróker</span></b></button>
@@ -907,7 +920,8 @@ select{font:inherit;font-size:16px;color:var(--ink);background:var(--surface);bo
   }
   function vObjetivos(){
     const o=(D.objetivos||[]).map(o=>{ const f=o.pct?(x=>pct(x)):(x=>eur(x,0)), w=Math.round((o.progreso||0)*100), bc={ok:'ok',camino:'ok',aviso:'warn',mal:'over',curso:'info'}[o.nivel]||'info';
-      const pie=o.nivel!=='ok'&&o.logro?'Lo alcanzas hacia '+mesTxt(o.logro):'';
+      const pie=o.nivel!=='ok'&&o.logro?'Lo alcanzas hacia '+mesTxt(o.logro)+(o.ritmo_real?' a tu ritmo actual':'')
+        :o.nivel!=='ok'&&o.ritmo_real&&o.ritmo<0&&o.sentido!=='No pasar de'?'A tu ritmo actual no llegas: gastas '+eur(-o.ritmo,0)+'/mes más de lo que entra':'';
       return `<div class="goal"><div class="goal-top"><b>${esc(o.nombre)}</b><span class="pill ${o.nivel}">${esc(o.estado)}</span></div><div class="bar"><i class="${bc}" style="width:${w}%"></i></div><div class="goal-foot num"><span>${f(o.actual)} de ${o.sentido==='No pasar de'?'máx. ':''}${f(o.meta)}</span><span>${esc(pie)}</span></div></div>`; }).join('');
     const n=D.nomina, fn=(l,a,b,g)=>{ const d=g?a-b:b-a; return `<tr><td>${l}</td><td>${eur(a,0)}</td><td class="${d<-0.5?'neg':''}">${eur(b,0)}</td></tr>`; };
     return `<h1>Objetivos</h1><section style="padding-top:12px"><div class="card">${o||'<span class="muted">Sin objetivos.</span>'}</div></section>
@@ -992,7 +1006,7 @@ select{font:inherit;font-size:16px;color:var(--ink);background:var(--surface);bo
   function cambiar(datos,texto){
     const uid=(crypto.randomUUID?crypto.randomUUID():Date.now().toString(36)+Math.random().toString(36).slice(2));
     pend.push({uid,texto,creado:new Date().toISOString(),enviado:false,datos:Object.assign({uid},datos)}); guardarPend(); pintar();
-    enviarPend().then(()=>{ pintar(); aviso(pend.find(p=>p.uid===uid&&p.enviado)?'Enviado. Se aplica en cuanto tu ordenador tenga el programa abierto.':'Sin conexión: se enviará solo en cuanto vuelva.'); });
+    enviarPend().then(()=>{ pintar(); aviso(pend.find(p=>p.uid===uid&&p.enviado)?'Enviado. Tu ordenador lo aplica en unos segundos si el programa está abierto, o en menos de 30 minutos si está encendido.':'Sin conexión: se enviará solo en cuanto vuelva.'); });
   }
   function vEspera(){
     if(!pend.length) return '';
