@@ -416,7 +416,9 @@ select{font:inherit;font-size:16px;color:var(--ink);background:var(--surface);bo
   // ---------- pestañas
   document.querySelectorAll('#tabs button').forEach(b=>b.onclick=()=>{ pestana=b.dataset.t; pintar(); scrollTo(0,0); });
   function estado(){ const e=$('#estado'); if(!e) return; const v=vivo(), abierto=v&&Object.values(v.precios||{}).some(p=>p.abierto);
-    e.innerHTML=`<span>${errorRed?'Sin conexión · ':''}Actualizado ${hace(ultimaSync)}</span>${v?`<span class="vivo ${abierto?'on':''}"><i></i>${abierto?'Bolsa abierta':'Bolsa cerrada'}</span>`:''}`; }
+    // la fecha de los datos (hasta dónde llegan tus extractos), no solo la de la última subida
+    const dh=D&&D.datos_hasta, viejos=dh&&(Date.now()-new Date(dh+'T23:59:59'))>7*864e5;
+    e.innerHTML=`<span>${errorRed?'Sin conexión · ':''}Actualizado ${hace(ultimaSync)}${dh?` · <span class="${viejos?'neg':''}">datos hasta ${fecha(dh)}</span>`:''}</span>${v?`<span class="vivo ${abierto?'on':''}"><i></i>${abierto?'Bolsa abierta':'Bolsa cerrada'}</span>`:''}`; }
   function pintar(){
     $('#tabs').hidden=false;
     document.querySelectorAll('#tabs button').forEach(b=>b.setAttribute('aria-current',b.dataset.t===pestana?'page':'false'));
@@ -431,7 +433,8 @@ select{font:inherit;font-size:16px;color:var(--ink);background:var(--surface);bo
   // vale solo si es reciente (el programa está abierto); si no, se usan los precios del último cálculo
   function vivo(){ const v=D.vivo; return v&&v.generado&&(Date.now()-new Date(v.generado))<15*60e3?v:null; }
   function valorCartera(){ const v=D.vivo; if(!v||!v.precios) return D.cartera.valor;
-    return (D.cartera.posiciones||[]).reduce((a,p)=>a+(v.precios[p.isin]?v.precios[p.isin].valor:p.valor),0); }
+    // igual que el PC: precio en vivo × tus títulos actuales (el resumen puede ser más nuevo que el precio en vivo)
+    return (D.cartera.posiciones||[]).reduce((a,p)=>a+(v.precios[p.isin]?v.precios[p.isin].precio*p.titulos:p.valor),0); }
   function netoVivo(){ return D.patrimonio.neto+(valorCartera()-D.cartera.valor); }
 
   // ================= GRÁFICAS DE EVOLUCIÓN INTERACTIVAS =================
@@ -709,7 +712,8 @@ select{font:inherit;font-size:16px;color:var(--ink);background:var(--surface);bo
     let semana='';
     if(w){ const d=Math.min(7,Math.max(1,Math.round((Date.now()-new Date(w.desde+'T00:00:00'))/864e5)+1)), rw=d/7, q=w.limite-w.gastado;
       semana=`<section><h2>Esta semana</h2><div class="card"><div><span class="eyebrow">${q>=0?'Te quedan':'Te has pasado'}</span><div class="total num ${q<0?'neg':''}">${eur(Math.abs(q),0)} <span class="small muted" style="font-family:var(--body);font-weight:400">de ${eur(w.limite,0)}</span></div></div>
-        ${w.grupos.map(g=>`<div class="grp"><div class="grp-top"><span>${esc(g.grupo)}</span><span class="num">${eur(g.gastado,0)} <span class="muted">/ ${eur(g.limite,0)}</span></span></div>${barra(g.gastado,g.limite,rw)}</div>`).join('')}</div></section>`; }
+        ${w.grupos.map(g=>`<div class="grp"><div class="grp-top"><span>${esc(g.grupo)}</span><span class="num">${eur(g.gastado,0)} <span class="muted">/ ${eur(g.limite,0)}</span></span></div>${barra(g.gastado,g.limite,rw)}</div>`).join('')}
+        ${w.al_dia===false?'<span class="small neg">Faltan datos de esta semana: actualiza en el ordenador con los últimos extractos.</span>':''}</div></section>`; }
     const grupos=m.grupos.map(g=>`<div class="grp"><div class="grp-top"><span>${esc(g.grupo)}</span><span class="num">${eur(g.mes||0,0)} ${g.presupuesto?`<span class="muted">/ ${eur(g.presupuesto,0)}</span>`:''}</span></div>${g.presupuesto?barra(g.mes||0,g.presupuesto,ritmo):''}</div>`).join('');
     const avisos=(D.avisos||[]).map(a=>`<div class="alert"><span>${esc(a)}</span></div>`).join('');
     return `<div class="hero"><span class="eyebrow">Patrimonio neto</span><div class="big num">${eur(neto,0)}</div>${chip}
@@ -834,7 +838,7 @@ select{font:inherit;font-size:16px;color:var(--ink);background:var(--surface);bo
       const noms=(d.nominas||[]).map(n=>`<div class="row"><span>${esc(fecha(n.fecha))} · <span class="muted">${esc(mesTxt(n.mes))}</span></span><span class="r">${eur(n.neto,2)}</span></div>`).join('');
       return `<section style="padding-top:12px">${sel}
         <div class="card">
-          ${a.resultado?`<div class="ff-ver ${a.resultado.tipo}"><span class="small">${a.resultado.tipo==='pagar'?'Te saldría a pagar':a.resultado.tipo==='devolver'?'Hacienda te devolvería':'Te saldría a cero'}</span><b class="num">${a.resultado.tipo==='cero'?'0 €':eur(a.resultado.importe,0)}</b><span class="small muted">Impuesto ${eur(a.cuota,0)} − retenido ${eur(en.retenciones_trabajo||0,0)}${a.resultado.retenciones_estimadas?' · retenciones estimadas':a.resultado.exacto?' · con tus certificados':' · con tus nóminas'}${a.resultado.proyectado?' · año proyectado a 12 meses':''}</span></div>`:''}
+          ${a.resultado?`<div class="ff-ver ${a.resultado.tipo}"><span class="small">${a.resultado.tipo==='pagar'?'Te saldría a pagar':a.resultado.tipo==='devolver'?'Hacienda te devolvería':'Te saldría a cero'}</span><b class="num">${a.resultado.tipo==='cero'?'0 €':eur(a.resultado.importe,0)}</b><span class="small muted">Impuesto ${eur(a.cuota,0)} − retenido ${eur(a.retenciones??en.retenciones_trabajo??0,0)}${a.resultado.retenciones_estimadas?' · retenciones estimadas':a.resultado.exacto?' · con tus certificados':' · con tus nóminas'}${a.resultado.proyectado?' · año proyectado a 12 meses':''}</span></div>`:''}
           ${a.hacienda!=null?`<div class="ff-av">Lo que te dijo Hacienda: <b>${a.hacienda<0?'te devolvió '+eur(-a.hacienda,0):a.hacienda>0?'pagaste '+eur(a.hacienda,0):'cero'}</b>.</div>`:''}
           ${a.resultado&&a.resultado.retenciones_estimadas?aviso('Desde el banco solo se ve tu sueldo neto: la retención de cada empresa está estimada con el algoritmo de la AEAT. Escribe la real (nómina o certificado) en el programa del ordenador para que el resultado sea exacto.','aviso'):''}
           <div class="kpis ff-k2"><div><span class="small muted">Impuesto del año</span><span class="ff-mid num">${eur(a.cuota,0)}</span></div><div><span class="small muted">Tipo medio</span><span class="ff-mid num">${pct(a.tipo_medio,1)}</span></div></div>
@@ -880,7 +884,7 @@ select{font:inherit;font-size:16px;color:var(--ink);background:var(--surface);bo
   function vCartera(){
     const c=D.cartera, P=c.posiciones||[], v=D.vivo, vr=vivo();
     if(!P.length) return `<h1>Cartera</h1><p class="muted">Aún no hay inversiones.</p>`;
-    const filas=P.map(p=>{ const x=v&&v.precios&&v.precios[p.isin]; return Object.assign({},p,{pv:x?x.precio:p.precio, vv:x?x.valor:p.valor, hoy:x&&vr?x.cambio:null}); }).sort((a,b)=>b.vv-a.vv);
+    const filas=P.map(p=>{ const x=v&&v.precios&&v.precios[p.isin]; return Object.assign({},p,{pv:x?x.precio:p.precio, vv:x?x.precio*p.titulos:p.valor, hoy:x&&vr?x.cambio:null}); }).sort((a,b)=>b.vv-a.vv);
     const total=filas.reduce((a,f)=>a+f.vv,0), coste=filas.reduce((a,f)=>a+(f.coste||0),0), hoy=vr?vr.cambio_dia:null;
     const porTipo={}; filas.forEach(f=>porTipo[f.tipo]=(porTipo[f.tipo]||0)+f.vv);
     const partes=Object.entries(porTipo).sort((a,b)=>b[1]-a[1]);
